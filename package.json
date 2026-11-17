@@ -1,0 +1,57 @@
+{
+  "name": "frappe-saaskit-starter",
+  "private": true,
+  "version": "0.1.0-alpha.1",
+  "author": "Tridz Technologies",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "typecheck": "tsc -b",
+    "lint": "oxlint",
+    "test": "vitest run",
+    "preview": "vite preview",
+    "test:e2e": "playwright test",
+    "e2e": "playwright test"
+  },
+  "dependencies": {
+    "@frappe-saaskit/client": "file:./vendor/saaskit/frappe-saaskit-client-0.1.0-alpha.1.tgz",
+    "@frappe-saaskit/react": "file:./vendor/saaskit/frappe-saaskit-react-0.1.0-alpha.1.tgz",
+    "@tanstack/react-query": "^5.107.1",
+    "@ui-sdk/core": "^0.1.0-beta.6",
+    "@ui-sdk/react": "^0.1.0-beta.6",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "react-router-dom": "^7.18.5"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.65.1",
+    "@testing-library/dom": "^10.4.2",
+    "@testing-library/react": "^16.3.3",
+    "@types/node": "^24.19.2",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "jsdom": "^31.0.1",
+    "oxlint": "^1.90.0",
+    "typescript": "~7.0.2",
+    "vite": "^8.3.6",
+    "vitest": "^5.1.0"
+  },
+  "license": "MIT",
+  "description": "Customer-console starter for Frappe SaaS products: React + ui-sdk, runs on fixtures or a saas_core backend.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tridz-dev/frappe-saaskit-starter.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tridz-dev/frappe-saaskit-starter/issues"
+  },
+  "homepage": "https://github.com/tridz-dev/frappe-saaskit-starter#readme",
+  "engines": {
+    "node": ">=20.19"
+  },
+  "overrides": {
+    "@frappe-saaskit/client": "file:./vendor/saaskit/frappe-saaskit-client-0.1.0-alpha.1.tgz"
+  }
+}

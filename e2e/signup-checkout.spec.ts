@@ -1,0 +1,23 @@
+import { test, expect } from '@playwright/test'
+
+test('signup -> onboarding -> checkout -> provisioning -> instance', async ({ page }) => {
+  await page.goto('/signup')
+  await page.getByLabel('Name').fill('Ada')
+  await page.getByLabel('Email').fill('ada@example.com')
+  await page.getByLabel('Password').fill('secret123')
+  await page.locator('form').getByRole('button', { name: /sign ?up|create/i }).click()
+  await page.getByRole('button', { name: /continue setup/i }).click()
+  await expect(page).toHaveURL(/\/onboarding/)
+  await page.getByRole('textbox').first().fill('Acme')
+  await page.getByRole('textbox').nth(1).fill('acme')
+  await expect(page.getByText('Available')).toBeVisible()
+  await page.getByRole('button', { name: /next/i }).click()
+  await page.getByRole('button', { name: /finish|continue|checkout/i }).click()
+  await expect(page).toHaveURL(/\/checkout\?plan=/)
+  await page.getByRole('button', { name: /pay|checkout/i }).click()
+  await expect(page).toHaveURL(/\/provisioning\//)
+  await expect(page.getByText(/ready/i).first()).toBeVisible({ timeout: 15_000 })
+  await page.getByRole('link', { name: /account/i }).first().click()
+  await expect(page).toHaveURL(/\/console/)
+  await expect(page.getByTestId('instance-row').filter({ hasText: /workspace-/ })).toHaveCount(1)
+})
