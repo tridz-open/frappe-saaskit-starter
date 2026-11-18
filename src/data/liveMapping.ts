@@ -1,7 +1,7 @@
 // Pure mappers for the live adapter, kept free of SDK imports so they are unit-testable.
 import type * as T from './types'
 
-/** The `Me` fields the starter reads. `email_verified` is not in the vendored SDK 0.1.0-alpha.1 types yet. */
+/** The `Me` fields the starter reads. `email_verified` is typed in SDK 0.1.0-alpha.3; the defensive cast is kept for older SDKs. */
 export type MeLike = { user: string; email: string; full_name?: string; roles?: string[]; email_verified?: boolean }
 
 /**
