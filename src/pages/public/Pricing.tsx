@@ -1,6 +1,6 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@ui-sdk/react/button'
 import { usePlans, useAuth } from '../../data'
+import { CtaButton } from '../../lib/CtaButton'
+import { useSignupCta } from '../../lib/cta'
 import { useSaas } from '../../app/context'
 import { useT } from '../../i18n'
 import { planMoney, recommendedPlanId } from '../../components/PlanCards'
@@ -15,6 +15,7 @@ export function Pricing() {
   const { site } = useSaas()
   const { plans, loading } = usePlans()
   const { user } = useAuth()
+  const ctas = useSignupCta()
   const featured = recommendedPlanId(plans)
   return (
     <>
@@ -50,7 +51,7 @@ export function Pricing() {
                   </ul>
                 </CardBody>
                 <CardFooter>
-                  <Button data-variant={popular ? 'solid' : undefined} style={{ width: '100%' }} render={<Link to={`/checkout?plan=${encodeURIComponent(p.id)}`} />}>{t('pricing.choose', { plan: p.name })}</Button>
+                  <CtaButton data-variant={popular ? 'solid' : undefined} style={{ width: '100%' }} target={ctas.plan(p.id, p.name, t('pricing.choose', { plan: p.name }))} />
                 </CardFooter>
               </Card>
             )

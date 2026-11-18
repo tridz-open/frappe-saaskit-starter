@@ -9,6 +9,8 @@ import type * as T from './types'
 import { CheckoutDismissed } from './types'
 import { fieldsFromSchema, takeRecipeFields } from './recipeFields'
 import { site } from '../config/site'
+import { betaAccessApi } from './betaAccessApi'
+import { LIVE_CAPABILITIES, toUser, type MeLike } from './liveMapping'
 
 const BASE = (import.meta.env?.VITE_SAAS_API_URL as string | undefined) ?? ''
 export const client = createClient({ baseUrl: BASE, auth: { type: 'cookie' } })
@@ -52,7 +54,7 @@ export function useAuth() {
   const login = K.useLogin(); const signup = K.useSignup(); const logout = K.useLogout()
   const forgot = K.useRequestPasswordReset(); const reset = K.useConfirmPasswordReset()
   const reqVerify = K.useRequestEmailVerification(); const confirmEmail = K.useConfirmEmail()
-  const user: T.User | null = q.data ? { id: q.data.user, email: q.data.email, name: q.data.full_name ?? q.data.email, emailVerified: true, onboarded: true, roles: q.data.roles } : null
+  const user: T.User | null = q.data ? toUser(q.data as MeLike) : null
   return {
     user, loading: q.isLoading,
     async login(email: string, password: string) { await login.mutateAsync({ email, password }) },
@@ -91,6 +93,11 @@ export function useSignupFields(): T.OnboardingField[] {
 }
 /** Public site domain (`<slug>.<site_domain>`), from the SDK public config. */
 export function useSiteDomain(): string | null { return K.usePublicConfig().data?.site_domain ?? null }
+/** Signup gate from the public config. `signup_mode` is not in the vendored SDK types yet, so it is read defensively. */
+export function usePublicConfig(): T.PublicConfig {
+  const q = K.usePublicConfig(); const d = q.data as { public_signup?: boolean; signup_mode?: string } | undefined
+  return { publicSignup: d?.public_signup === true, signupMode: d?.signup_mode, loaded: !!d }
+}
 /** Live address check against the SDK slug-availability endpoint. */
 export function useSlugAvailability(slug: string): { data?: T.SlugCheck; isFetching: boolean; isError?: boolean } {
   const q = K.useSlugAvailability(slug)
@@ -226,7 +233,7 @@ export function useNotifications() {
 }
 /** What the live API can really serve. Anything false is hidden in the UI rather than faked. */
 export function useCapabilities(): T.Capabilities {
-  return { sessions: false, notifications: false, usage: false, apiTokens: false, backupDownload: true, cancelDeletion: false, emailVerification: false }
+  return LIVE_CAPABILITIES
 }
 
 export function useUpdateProfile() {
@@ -276,4 +283,25 @@ export function useInvoicePdf(invoiceId: string) {
 export function useAcceptInvite(): (token: string) => Promise<void> {
   const m = K.useAcceptInvite()
   return async (token) => { await m.mutateAsync(token) }
+}
+
+// --- Admin (operators only; the server answers 403 to everyone else) ---
+const isForbidden = (e: unknown) => (e as { status?: number } | null)?.status === 403
+export function useAdminTenants(): { tenants: T.AdminTenant[] } & T.AdminListState {
+  const q = K.useAdminTenants()
+  const tenants = (q.data ?? []).map((t): T.AdminTenant => ({ id: t.name, slug: t.slug, url: t.url ?? '', status: t.status, planId: t.plan, createdAt: t.created_at ?? '' }))
+  return { tenants, loading: q.isLoading, error: q.isError && !isForbidden(q.error), forbidden: isForbidden(q.error), refresh: () => void q.refetch() }
+}
+export function useAdminBetaAccess() {
+  const qc = useQueryClient()
+  const KEY = ['saas', 'admin', 'beta-access']
+  const q = useQuery({ queryKey: KEY, queryFn: betaAccessApi.list, retry: (n, e) => !isForbidden(e) && n < 2 })
+  const done = async <R,>(p: Promise<R>) => { const r = await p; await qc.invalidateQueries({ queryKey: KEY }); return r }
+  return {
+    entries: q.data?.entries ?? [], signupMode: q.data?.signupMode ?? '', loading: q.isLoading, error: q.isError && !isForbidden(q.error), forbidden: isForbidden(q.error),
+    refresh: () => void q.refetch(),
+    add: (entries: string[], sendInvite: boolean, note?: string) => done(betaAccessApi.add(entries, sendInvite, note)),
+    async remove(pattern: string) { await done(betaAccessApi.remove(pattern)) },
+    async resend(email: string) { await done(betaAccessApi.resend(email)) },
+  }
 }

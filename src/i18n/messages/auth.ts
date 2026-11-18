@@ -43,6 +43,7 @@ const m: Record<string, string> = {
   'auth.signedOut': "You've been signed out.",
   'auth.signupClosed': 'New sign-ups are by invitation.',
   'auth.requestAccess': 'Request access',
+  'auth.requestAccessPlan': 'Request access: {plan}',
   'auth.forgot.lead': "Enter your email and we'll send you a link to reset your password.",
   'auth.consent.prefix': 'By creating an account you agree to our',
   'auth.consent.and': 'and',

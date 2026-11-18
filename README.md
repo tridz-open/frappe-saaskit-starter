@@ -183,6 +183,31 @@ createSaasApp({ data: { useTickets: myTicketsHook } })        // partial: overri
 
 `setDataAdapter(partial)` is exported too; a `DataProvider` in the adapter wraps the app. `useCapabilities()` tells pages which features the backend really serves; anything it marks `false` is hidden instead of faked. With the saaskit adapter that is usage, sessions, notifications, API tokens and email verification. Team hooks act on the user's first active tenant. `useInstances().remove(id, confirmSlug?)` passes `confirm_slug` (defaults to the instance slug).
 
+## Provisioning templates (Frappe Cloud)
+
+The starter never sends a `template` itself: which recipe a new workspace is built from is decided by the saas_core `Template` that your Plans reference. A template that works in a local bench can still fail on Frappe Cloud, so check these before you launch:
+
+- **`is_public: 1`.** It defaults to 0, and checkout rejects templates that are not public. Tick it on any template a public Plan references.
+- **`site_admin: 1`.** Required when a recipe hook (anything that is not a built-in `core.*` hook) uses the site-admin client (`ctx.site_admin`). It defaults to 0.
+- **No `host_name` or `encryption_key` hooks.** Frappe Cloud manages both, so `core.set_host_name` and `core.set_fresh_encryption_key` are rejected as protected config. Remove them from the hook list.
+- **Release hooks last.** End the hook list with `core.scheduler_resume` and then `core.maintenance_off`, or the new site stays at 503 (current fcctl releases isolation by default, but older versions need both).
+- **Health checks are plain objects** (`{"name": "login", "path": "/login", "expect": 200}`), not callables, and are retried after maintenance is lifted.
+
+```json
+{
+  "slug": "starter",
+  "is_public": 1,
+  "site_admin": 1,
+  "hooks": [
+    {"name": "core.scheduler_resume", "version": "1"},
+    {"name": "core.maintenance_off", "version": "1"}
+  ],
+  "health_checks": [{"name": "login", "path": "/login", "expect": 200}]
+}
+```
+
+Full field reference, hook shapes, backup sources and the shared-versus-dedicated bench setting: [saas_core `docs/TEMPLATES.md`](https://github.com/tridz-dev/saas_core/blob/main/docs/TEMPLATES.md) (saas_core is not public yet; the file ships with it).
+
 ## Design system
 
 The starter is **unbranded but not unstyled**. It uses ui-sdk's default theme, with one foundation layer that fills the gaps ui-sdk leaves.

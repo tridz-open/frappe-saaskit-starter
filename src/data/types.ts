@@ -7,6 +7,8 @@ export type Instance = { id: string; name: string; url: string; status: Instance
 export type Job = { id: string; status: 'queued' | 'running' | 'success' | 'failed'; progress: number; step: string; instanceId?: string }
 export type Backup = { id: string; instanceId: string; createdAt: string; sizeMb: number; /** Exact size when the API reports it. */ sizeBytes?: number; kind?: 'automatic' | 'manual'; status: 'ready' | 'running' | 'failed' }
 /** Which optional features the active data adapter can really serve. UI hides what is false (never shows invented data). */
+/** Public (unauthenticated) config. `loaded` is false until the server answered; treat unknown as closed. */
+export type PublicConfig = { publicSignup: boolean; signupMode?: string; loaded: boolean }
 export type Capabilities = { sessions: boolean; notifications: boolean; usage: boolean; apiTokens: boolean; backupDownload: boolean; cancelDeletion: boolean; emailVerification: boolean }
 export type Invoice = { id: string; number: string; date: string; amount: number; currency: string; status: 'paid' | 'open' | 'void'; lines: { description: string; amount: number }[] }
 export type PaymentMethod = { id: string; brand: string; last4: string; isDefault: boolean }
@@ -50,3 +52,11 @@ export type OnboardingField = {
 }
 
 export type SlugCheck = { slug: string; available: boolean; reason: null | 'invalid' | 'reserved' | 'taken'; message: string; suggestion: string | null }
+
+/** Operator view of a customer workspace (admin only). */
+export type AdminTenant = { id: string; slug: string; url: string; status: string; planId: string; createdAt: string }
+/** One beta-access allowlist row: an exact email or an `@domain` pattern. Account fields are null for domains. */
+export type BetaEntry = { pattern: string; kind: 'email' | 'domain'; note: string | null; invitedAt: string | null; accountExists: boolean | null; verified: boolean | null; hasTenant: boolean | null }
+export type BetaAddResult = { added: string[]; alreadyListed: string[]; invitesSent: string[]; invitesFailed: string[]; skippedDomains: string[] }
+/** Shared shape of the admin list hooks. `forbidden` = the caller is not an operator (HTTP 403). */
+export type AdminListState = { loading: boolean; error: boolean; forbidden: boolean; refresh: () => void }

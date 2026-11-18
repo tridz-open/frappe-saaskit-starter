@@ -13,6 +13,8 @@ export const site = {
   logoHref: null as string | null,
   tagline: 'Short tagline goes here',
   supportEmail: 'support@example.com', // placeholder: the Support page hides it until a real address is set
+  /** Where "Request access" goes when signup is not open: a mailto: or http(s) URL. Empty = mailto the supportEmail. */
+  requestAccessUrl: '',
   currency: 'USD',
   defaultLocale: 'en',
   nav: [
@@ -29,7 +31,10 @@ export const site = {
     { label: 'Help and support', to: '/console/support' },
   ] as NavItem[],
   /** Extra sidebar group for operators: shown only to users holding `adminRole`. */
-  adminNav: [] as NavItem[],
+  adminNav: [
+    { label: 'Tenants', to: '/console/admin/tenants' },
+    { label: 'Beta access', to: '/console/admin/beta' },
+  ] as NavItem[],
   adminRole: 'SaaS Admin',
   plans: [
     { id: 'starter', name: 'Starter', price: 10, interval: 'month' as const, features: ['1 instance', 'Daily backups'] },

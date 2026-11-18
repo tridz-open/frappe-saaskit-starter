@@ -12,6 +12,7 @@ import support from './messages/support'
 import settings from './messages/settings'
 import errors from './messages/errors'
 import legal from './messages/legal'
+import admin from './messages/admin'
 
 export const en: Record<string, string> = {
   'landing.title': 'Welcome',
@@ -34,4 +35,5 @@ export const en: Record<string, string> = {
   ...settings,
   ...errors,
   ...legal,
+  ...admin,
 }
