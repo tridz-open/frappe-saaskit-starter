@@ -9,6 +9,7 @@ import type * as T from './types'
 import { CheckoutDismissed } from './types'
 import { fieldsFromSchema, takeRecipeFields } from './recipeFields'
 import { site } from '../config/site'
+import { LIVE_CAPABILITIES, toUser, type MeLike } from './liveMapping'
 
 const BASE = (import.meta.env?.VITE_SAAS_API_URL as string | undefined) ?? ''
 export const client = createClient({ baseUrl: BASE, auth: { type: 'cookie' } })
@@ -52,7 +53,7 @@ export function useAuth() {
   const login = K.useLogin(); const signup = K.useSignup(); const logout = K.useLogout()
   const forgot = K.useRequestPasswordReset(); const reset = K.useConfirmPasswordReset()
   const reqVerify = K.useRequestEmailVerification(); const confirmEmail = K.useConfirmEmail()
-  const user: T.User | null = q.data ? { id: q.data.user, email: q.data.email, name: q.data.full_name ?? q.data.email, emailVerified: true, onboarded: true, roles: q.data.roles } : null
+  const user: T.User | null = q.data ? toUser(q.data as MeLike) : null
   return {
     user, loading: q.isLoading,
     async login(email: string, password: string) { await login.mutateAsync({ email, password }) },
@@ -231,7 +232,7 @@ export function useNotifications() {
 }
 /** What the live API can really serve. Anything false is hidden in the UI rather than faked. */
 export function useCapabilities(): T.Capabilities {
-  return { sessions: false, notifications: false, usage: false, apiTokens: false, backupDownload: true, cancelDeletion: false, emailVerification: false }
+  return LIVE_CAPABILITIES
 }
 
 export function useUpdateProfile() {
