@@ -161,6 +161,9 @@ Pages and components can be wrapped in a route override to change behaviour with
   - `highlightPlanId?: string | null`: plan to badge. Omitted = the plan marked `recommended`, else the middle of three or more. `null` = no highlighted plan.
   - `renderPlanFeatures?: (plan) => ReactNode`: replaces a card's feature list (return `null` to hide it).
   - `badgeLabel?: string | ((plan) => string)`: badge text; defaults to `labels.recommended`.
+- **`Onboarding`** (`src/pages/onboarding/Onboarding.tsx`)
+  - `planCards?`: `highlightPlanId`, `renderPlanFeatures`, `badgeLabel`, forwarded to `PlanRadioCards`.
+  - `checkSlug?: (slug, signal) => Promise<SlugCheck>`: replaces the data adapter's `useSlugAvailability` for the address field. It is called with a valid, debounced slug and an `AbortSignal` that fires when the user keeps typing. Resolve with `{ slug, available, reason: null | 'invalid' | 'reserved' | 'taken', message, suggestion }` (`message` is shown as the error, `suggestion` offers a one-click replacement); reject when the check cannot be done, which shows a soft warning and does not block the user.
 <!-- props:end -->
 
 ## Data adapters

@@ -1,6 +1,6 @@
 import { useEffect, useState, type ComponentProps, type FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useAuth, usePlans, useSignupFields, useSiteDomain, useSlugAvailability, type OnboardingField } from '../../data'
+import { useAuth, usePlans, useSignupFields, useSiteDomain, useSlugAvailability, type OnboardingField, type SlugCheck } from '../../data'
 import { stashRecipeFields } from '../../data/recipeFields'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@ui-sdk/react/select'
 import { Button } from '@ui-sdk/react/button'
@@ -12,6 +12,7 @@ import { Card, CardBody, CardFooter, CardHeader } from '../../components/primiti
 import { Row, Stack } from '../../components/primitives/Layout'
 import { useT } from '../../i18n'
 import { site } from '../../config/site'
+import { useCustomSlugCheck, type CheckSlug } from '../../data/slugCheck'
 import { SLUG_RE, normalizeTyping, slugify } from '../../data/slug'
 
 // Signup already asks for the name, so onboarding starts at the workspace step (internal steps 2..3).
@@ -26,11 +27,13 @@ function useDebounced<T>(value: T, ms: number) {
 }
 
 export type OnboardingProps = {
+  /** Replaces the data adapter's `useSlugAvailability`. Receives a valid, debounced slug; resolve with the availability (reason may be `reserved`) or reject if it cannot be checked (the user is then not blocked). */
+  checkSlug?: CheckSlug
   /** Forwarded to the plan step's `PlanRadioCards`: `highlightPlanId`, `renderPlanFeatures`, `badgeLabel`. */
   planCards?: Pick<ComponentProps<typeof PlanRadioCards>, 'highlightPlanId' | 'renderPlanFeatures' | 'badgeLabel'>
 }
 
-export function Onboarding({ planCards }: OnboardingProps = {}) {
+export function Onboarding({ planCards, checkSlug }: OnboardingProps = {}) {
   const t = useT(); const nav = useNavigate(); const { plans } = usePlans(); const { user } = useAuth(); const apiFields = useSignupFields()
   const fields: OnboardingField[] = site.onboardingFields.length ? site.onboardingFields : apiFields
   const [extra, setExtra] = useState<Record<string, string>>({})
@@ -46,7 +49,9 @@ export function Onboarding({ planCards }: OnboardingProps = {}) {
   const slug = v.instance.replace(/-+$/, '')
   const slugOk = SLUG_RE.test(slug)
   const debounced = useDebounced(slugOk ? slug : '', 400)
-  const check = useSlugAvailability(debounced)
+  const adapterCheck = useSlugAvailability(checkSlug ? '' : debounced)
+  const customCheck = useCustomSlugCheck(checkSlug ? debounced : '', checkSlug)
+  const check: { data?: SlugCheck; isFetching: boolean } = checkSlug ? customCheck : adapterCheck
   // A failed check must not trap the user: the address is validated again when the site is created.
   const checkFailed = slugOk && debounced === slug && !check.isFetching && !!(check as { isError?: boolean }).isError
   const settled = slugOk && debounced === slug && !check.isFetching && check.data?.slug === slug
