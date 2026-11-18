@@ -50,7 +50,7 @@ export function InstanceDetailPage() {
                   [t('console.detail.created'), formatDay(inst.createdAt)],
                 ]} />
               </CardBody>
-              {live && <CardFooter><Button type="button" data-variant="ghost" data-testid="duplicate-instance" onClick={() => setCopy(true)}>{t('console.detail.duplicate')}</Button></CardFooter>}
+              {live && caps.duplicate && <CardFooter><Button type="button" data-variant="ghost" data-testid="duplicate-instance" onClick={() => setCopy(true)}>{t('console.detail.duplicate')}</Button></CardFooter>}
             </Card>
             <Card aria-labelledby="danger-h" style={{ borderColor: 'color-mix(in oklab, var(--color-destructive) 35%, var(--color-border))' }}>
               <CardHeader><h2 id="danger-h">{t('console.detail.danger')}</h2></CardHeader>

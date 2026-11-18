@@ -1,7 +1,7 @@
 {
   "name": "frappe-saaskit-starter",
   "private": true,
-  "version": "0.1.0-alpha.1",
+  "version": "0.1.0-alpha.2",
   "author": "Tridz Technologies",
   "type": "module",
   "scripts": {
