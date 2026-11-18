@@ -9,7 +9,7 @@ export type Backup = { id: string; instanceId: string; createdAt: string; sizeMb
 /** Which optional features the active data adapter can really serve. UI hides what is false (never shows invented data). */
 /** Public (unauthenticated) config. `loaded` is false until the server answered; treat unknown as closed. */
 export type PublicConfig = { publicSignup: boolean; signupMode?: string; loaded: boolean }
-export type Capabilities = { sessions: boolean; notifications: boolean; usage: boolean; apiTokens: boolean; backupDownload: boolean; cancelDeletion: boolean; emailVerification: boolean }
+export type Capabilities = { sessions: boolean; notifications: boolean; apiTokens: boolean; backupDownload: boolean; cancelDeletion: boolean; emailVerification: boolean }
 export type Invoice = { id: string; number: string; date: string; amount: number; currency: string; status: 'paid' | 'open' | 'void'; lines: { description: string; amount: number }[] }
 export type PaymentMethod = { id: string; brand: string; last4: string; isDefault: boolean }
 export type UsageMetric = { key: string; label: string; used: number; limit: number; unit: string }

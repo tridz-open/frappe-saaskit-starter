@@ -22,7 +22,6 @@ describe('live capabilities', () => {
     expect(LIVE_CAPABILITIES.emailVerification).toBe(true)
     expect(LIVE_CAPABILITIES.apiTokens).toBe(true)
     expect(LIVE_CAPABILITIES.sessions).toBe(false)
-    expect(LIVE_CAPABILITIES.usage).toBe(false)
     expect(LIVE_CAPABILITIES.notifications).toBe(false)
   })
 })
