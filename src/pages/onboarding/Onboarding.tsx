@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from 'react'
+import { useEffect, useState, type ComponentProps, type FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth, usePlans, useSignupFields, useSiteDomain, useSlugAvailability, type OnboardingField } from '../../data'
 import { stashRecipeFields } from '../../data/recipeFields'
@@ -25,7 +25,12 @@ function useDebounced<T>(value: T, ms: number) {
   return d
 }
 
-export function Onboarding() {
+export type OnboardingProps = {
+  /** Forwarded to the plan step's `PlanRadioCards`: `highlightPlanId`, `renderPlanFeatures`, `badgeLabel`. */
+  planCards?: Pick<ComponentProps<typeof PlanRadioCards>, 'highlightPlanId' | 'renderPlanFeatures' | 'badgeLabel'>
+}
+
+export function Onboarding({ planCards }: OnboardingProps = {}) {
   const t = useT(); const nav = useNavigate(); const { plans } = usePlans(); const { user } = useAuth(); const apiFields = useSignupFields()
   const fields: OnboardingField[] = site.onboardingFields.length ? site.onboardingFields : apiFields
   const [extra, setExtra] = useState<Record<string, string>>({})
@@ -149,7 +154,7 @@ export function Onboarding() {
         {step === 3 && (<>
           <p className="muted" style={{ margin: 0 }}>{t('onboarding.planLead')}</p>
           <div style={{ paddingBlock: 'var(--space-3) var(--space-2)' }}>
-            <PlanRadioCards plans={list} value={plan} onChange={set('plan')} currency={site.currency} invalid={!!errors.plan}
+            <PlanRadioCards plans={list} value={plan} onChange={set('plan')} currency={site.currency} invalid={!!errors.plan} {...planCards}
               labels={{ group: t('onboarding.plan'), recommended: t('onboarding.planRecommended'), perMonth: t('onboarding.planPerMonth'), perYear: t('onboarding.planPerYear') }} />
           </div>
           <p className="muted" style={{ margin: 0, fontSize: 'var(--text-sm)' }}>{tax}</p>

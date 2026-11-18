@@ -152,6 +152,17 @@ const { App } = createSaasApp({
 - **Design system**: importing `src/index.ts` also loads `@ui-sdk/core/web.css` and `styles/foundation.css`, so consumer apps get tokens and primitives automatically (do not import them again). The primitives (`Card`, `Badge`, `Alert`, `Table`, `DescriptionList`, `EmptyState`, `Skeleton`, `PageHeader`, `Container`, `Stack`, `Row`, `Grid`, `Section`) are exported from the entry for building custom pages. There are no `Hero`/`PricingCard` components; compose them from these.
 - **Toasts**: `useToast()` returns the app toaster; call `toast('Saved', { description })`.
 
+## Component and page props
+
+Pages and components can be wrapped in a route override to change behaviour without forking, e.g. `routes: { override: { '/onboarding': { element: <Onboarding planCards={{ badgeLabel: 'Best value' }} /> } } }` (import from `src/pages/...`). Every prop is optional; omitting it keeps the default behaviour.
+
+<!-- props:start -->
+- **`PlanRadioCards`** (`src/components/PlanCards.tsx`; `Onboarding` forwards these through its `planCards` prop)
+  - `highlightPlanId?: string | null`: plan to badge. Omitted = the plan marked `recommended`, else the middle of three or more. `null` = no highlighted plan.
+  - `renderPlanFeatures?: (plan) => ReactNode`: replaces a card's feature list (return `null` to hide it).
+  - `badgeLabel?: string | ((plan) => string)`: badge text; defaults to `labels.recommended`.
+<!-- props:end -->
+
 ## Data adapters
 
 All pages read data through the hooks in `src/data` (`useAuth`, `useInstances`, ...). Those exports are stable wrappers over a module-level current adapter. The default comes from `VITE_DATA_ADAPTER` (fixtures, or `saaskit` for the live `@frappe-saaskit/react` backend), loaded in `main.tsx` via `await loadDataAdapter()`; `createSaasApp({ data })` overrides it at runtime, before the first render:

@@ -1,4 +1,4 @@
-import { useRef, type KeyboardEvent } from 'react'
+import { useRef, type KeyboardEvent, type ReactNode } from 'react'
 import type { Plan } from '../data/types'
 
 /** Price in the plan's own (charged) currency, e.g. ₹5,200. Whole amounts drop the decimals. */
@@ -48,12 +48,18 @@ type Props = {
   locale?: string
   labels: { group: string; recommended: string; perMonth: string; perYear: string }
   invalid?: boolean
+  /** Plan to badge as recommended. Omitted: the plan data decides (see `recommendedPlanId`). `null`: no highlighted plan. */
+  highlightPlanId?: string | null
+  /** Replaces the default feature list of a card. Return `null` to hide the list for that plan. */
+  renderPlanFeatures?: (plan: Plan) => ReactNode
+  /** Badge text for the highlighted plan; a function can vary it per plan. Omitted: `labels.recommended`. */
+  badgeLabel?: string | ((plan: Plan) => string)
 }
 
 /** Accessible radio-card group (WAI-ARIA radio group: roving tabindex, arrow keys, Space to select). */
-export function PlanRadioCards({ plans, value, onChange, currency, locale, labels, invalid }: Props) {
+export function PlanRadioCards({ plans, value, onChange, currency, locale, labels, invalid, highlightPlanId, renderPlanFeatures, badgeLabel }: Props) {
   const refs = useRef<(HTMLDivElement | null)[]>([])
-  const rec = recommendedPlanId(plans)
+  const rec = highlightPlanId === undefined ? recommendedPlanId(plans) : (highlightPlanId ?? undefined)
   const selected = plans.findIndex((p) => p.id === value)
   const tabbable = selected >= 0 ? selected : 0
   const move = (i: number) => { const n = (i + plans.length) % plans.length; onChange(plans[n].id); refs.current[n]?.focus() }
@@ -74,12 +80,12 @@ export function PlanRadioCards({ plans, value, onChange, currency, locale, label
             <div key={p.id} ref={(el) => { refs.current[i] = el }} role="radio" aria-checked={checked} aria-labelledby={nameId}
               aria-describedby={`plan-${p.id}-desc`} tabIndex={i === tabbable ? 0 : -1} data-slot="plan-card" data-recommended={isRec ? '' : undefined}
               onClick={() => onChange(p.id)} onKeyDown={onKey(i)}>
-              {isRec && <span data-part="badge">{labels.recommended}</span>}
+              {isRec && <span data-part="badge">{typeof badgeLabel === 'function' ? badgeLabel(p) : (badgeLabel ?? labels.recommended)}</span>}
               <div data-part="head"><span id={nameId} data-part="name">{p.name}</span><span data-part="dot" aria-hidden="true" /></div>
               <div id={`plan-${p.id}-desc`} style={{ display: 'contents' }}>
                 {p.description && <p data-part="who">{p.description}</p>}
                 <p data-part="price"><span data-part="amount">{planMoney(p, currency, locale)}</span><span data-part="per">{p.interval === 'year' ? labels.perYear : labels.perMonth}</span></p>
-                {p.features.length > 0 && <ul>{p.features.map((f) => <li key={f}><Check />{f}</li>)}</ul>}
+                {renderPlanFeatures ? renderPlanFeatures(p) : p.features.length > 0 && <ul>{p.features.map((f) => <li key={f}><Check />{f}</li>)}</ul>}
               </div>
             </div>
           )
