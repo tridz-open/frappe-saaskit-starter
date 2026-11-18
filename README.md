@@ -9,6 +9,12 @@ It runs in two modes:
 - **Fixture mode** (default): in-memory demo data, no backend. Good for trying the UI and building pages.
 - **Live mode** (`VITE_DATA_ADAPTER=saaskit`): talks to a Frappe site running the `saas_core` control-plane app through the TypeScript SDK [`frappe-saaskit-sdk`](https://github.com/tridz-open/frappe-saaskit-sdk) (`@frappe-saaskit/client` and `@frappe-saaskit/react`). `saas_core` is not public yet, so fixture mode is the way to try the starter today; the SDK is installed from the vendored tarballs in `vendor/saaskit` until it is published to npm.
 
+## Use at your own risk, and contributions
+
+**Use at your own risk:** this is early alpha software, provided "as is" without warranty of any kind (see [LICENSE](LICENSE)). Don't use it for production data you can't afford to lose.
+
+**Contributions:** we are not accepting pull requests or outside contributions at this time. If you find a bug or a problem, please [open a GitHub issue](https://github.com/tridz-open/frappe-saaskit-starter/issues).
+
 ## Status: alpha
 
 ### Experimental features
@@ -78,17 +84,17 @@ The SDK ([frappe-saaskit-sdk](https://github.com/tridz-open/frappe-saaskit-sdk))
 
 ```json
 "dependencies": {
-  "@frappe-saaskit/client": "https://github.com/tridz-open/frappe-saaskit-sdk/releases/download/v0.1.0-alpha.2/frappe-saaskit-client-0.1.0-alpha.2.tgz",
-  "@frappe-saaskit/react": "https://github.com/tridz-open/frappe-saaskit-sdk/releases/download/v0.1.0-alpha.2/frappe-saaskit-react-0.1.0-alpha.2.tgz"
+  "@frappe-saaskit/client": "https://github.com/tridz-open/frappe-saaskit-sdk/releases/download/v0.1.0-alpha.3/frappe-saaskit-client-0.1.0-alpha.3.tgz",
+  "@frappe-saaskit/react": "https://github.com/tridz-open/frappe-saaskit-sdk/releases/download/v0.1.0-alpha.3/frappe-saaskit-react-0.1.0-alpha.3.tgz"
 },
 "overrides": {
-  "@frappe-saaskit/client": "https://github.com/tridz-open/frappe-saaskit-sdk/releases/download/v0.1.0-alpha.2/frappe-saaskit-client-0.1.0-alpha.2.tgz"
+  "@frappe-saaskit/client": "https://github.com/tridz-open/frappe-saaskit-sdk/releases/download/v0.1.0-alpha.3/frappe-saaskit-client-0.1.0-alpha.3.tgz"
 }
 ```
 
-**Use SDK `0.1.0-alpha.2`.** Download the two `.tgz` assets from the [frappe-saaskit-sdk releases](https://github.com/tridz-open/frappe-saaskit-sdk/releases) (tag `v0.1.0-alpha.2`) and use the release URLs above, or save them in `vendor/saaskit/` and use `file:` specs with the same override block, for example `"@frappe-saaskit/client": "file:vendor/saaskit/frappe-saaskit-client-0.1.0-alpha.2.tgz"`.
+**Use SDK `0.1.0-alpha.3`.** Download the two `.tgz` assets from the [frappe-saaskit-sdk releases](https://github.com/tridz-open/frappe-saaskit-sdk/releases) (tag `v0.1.0-alpha.3`) and use the release URLs above, or save them in `vendor/saaskit/` and use `file:` specs with the same override block, for example `"@frappe-saaskit/client": "file:vendor/saaskit/frappe-saaskit-client-0.1.0-alpha.3.tgz"`.
 
-**Known mismatch:** `package.json` and `vendor/saaskit/` in this checkout still point at the `0.1.0-alpha.1` tarballs; they have not been re-vendored to alpha.2 yet. The live adapter reads `Me.email_verified`, which the alpha.1 types do not declare (see `src/data/liveMapping.ts`). The SDK is only needed for live mode and for `npm run typecheck`; fixture mode does not use it.
+**Known mismatch:** `package.json` and `vendor/saaskit/` in this checkout still point at the `0.1.0-alpha.1` tarballs; they have not been re-vendored to alpha.3 yet. The live adapter reads `Me.email_verified`, which the alpha.1 types do not declare (see `src/data/liveMapping.ts`). The SDK is only needed for live mode and for `npm run typecheck`; fixture mode does not use it.
 
 ## Run in fixture mode (no backend)
 
