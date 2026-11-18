@@ -57,6 +57,8 @@ export function useSubscription() {
 export function useSignupFields(): T.OnboardingField[] { return [] }
 /** Public site domain for workspace addresses. Fixtures have none (the site config value is the fallback). */
 export function useSiteDomain(): string | null { return null }
+/** Fixture mode: signup is always open. */
+export function usePublicConfig(): T.PublicConfig { return { publicSignup: true, signupMode: 'open', loaded: true } }
 /** Fixture availability: everything is free except 'taken' and 'demo'. */
 export function useSlugAvailability(slug: string): { data?: T.SlugCheck; isFetching: boolean } {
   const [data, setData] = useState<T.SlugCheck | undefined>()

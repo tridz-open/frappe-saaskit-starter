@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
-import { Button } from '@ui-sdk/react/button'
 import { Brand } from '../components/Brand'
 import { Footer } from '../components/Footer'
 import { AppToasts } from '../components/AppToasts'
 import { useSaas } from '../app/context'
 import type { InternalNavItem, NavItem } from '../config/site'
+import { CtaButton } from '../lib/CtaButton'
+import { useSignupCta } from '../lib/cta'
 import { isExternal, navKey as itemKey, NavAnchor } from '../lib/nav'
 
 const css = `
@@ -51,8 +52,10 @@ export function PublicLayout() {
     return () => document.removeEventListener('keydown', onKey)
   }, [open])
 
-  const cta = site.nav.find((n): n is InternalNavItem => n.to === '/signup') ?? null
-  const links = site.nav.filter((n) => n !== cta)
+  const signupItem = site.nav.find((n): n is InternalNavItem => n.to === '/signup') ?? null
+  const signupCta = useSignupCta()
+  const cta = signupItem ? signupCta.primary(signupItem.label) : null
+  const links = site.nav.filter((n) => n !== signupItem)
   const renderLink = (n: NavItem) =>
     isExternal(n) ? <NavAnchor item={n} /> : isAnchor(n.to) ? <Link to={n.to}>{n.label}</Link> : <NavLink to={n.to} end>{n.label}</NavLink>
 
@@ -67,10 +70,10 @@ export function PublicLayout() {
             <ul>{links.filter((n) => n.to !== '/login').map((n) => <li key={itemKey(n)}>{renderLink(n)}</li>)}</ul>
             <ul>
               {links.filter((n) => n.to === '/login').map((n) => <li key={itemKey(n)}>{renderLink(n)}</li>)}
-              {cta && <li><Button data-variant="solid" data-size="sm" render={<Link to={cta.to} />}>{cta.label}</Button></li>}
+              {cta && <li><CtaButton data-variant="solid" data-size="sm" target={cta} /></li>}
             </ul>
           </nav>
-          {cta && <span data-slot="header-cta"><Button data-variant="solid" data-size="sm" render={<Link to={cta.to} />}>{cta.label}</Button></span>}
+          {cta && <span data-slot="header-cta"><CtaButton data-variant="solid" data-size="sm" target={cta} /></span>}
           <button ref={toggleRef} type="button" data-slot="menu-toggle" aria-expanded={open} aria-controls="public-menu" aria-label={open ? 'Close menu' : 'Open menu'} onClick={() => setOpen((v) => !v)}>
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" aria-hidden="true">
               {open ? <path d="M4 4l10 10M14 4L4 14" /> : <path d="M3 5.5h12M3 12.5h12" />}

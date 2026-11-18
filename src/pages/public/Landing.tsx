@@ -1,5 +1,7 @@
 import type { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
+import { CtaButton } from '../../lib/CtaButton'
+import { useSignupCta } from '../../lib/cta'
 import { Button } from '@ui-sdk/react/button'
 import { useSaas, useSlots } from '../../app/context'
 import { useT } from '../../i18n'
@@ -20,6 +22,7 @@ export function Landing() {
   const t = useT()
   const { site } = useSaas()
   const { LandingHero } = useSlots()
+  const cta = useSignupCta().primary(t('landing.cta'))
   return (
     <>
       {LandingHero ? <LandingHero /> : (
@@ -27,7 +30,7 @@ export function Landing() {
           <h1 id="hero">{site.name}</h1>
           <p data-slot="lead">{site.tagline}</p>
           <div data-slot="row">
-            <Button data-variant="solid" data-size="lg" render={<Link to="/signup" />}>{t('landing.cta')}</Button>
+            <CtaButton data-variant="solid" data-size="lg" target={cta} />
             <Button data-size="lg" render={<Link to="/pricing" />}>{t('landing.seePricing')}</Button>
           </div>
         </section>
@@ -47,7 +50,7 @@ export function Landing() {
         <h2 id="cta-title">{t('landing.closingTitle')}</h2>
         <p className="muted" style={{ margin: 0 }}>{t('landing.closingBody')}</p>
         <div data-slot="row" style={{ justifyContent: 'center' }}>
-          <Button data-variant="solid" data-size="lg" render={<Link to="/signup" />}>{t('landing.cta')}</Button>
+          <CtaButton data-variant="solid" data-size="lg" target={cta} />
           <Button data-size="lg" render={<Link to="/pricing" />}>{t('landing.seePricing')}</Button>
         </div>
       </section>

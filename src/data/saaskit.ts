@@ -91,6 +91,11 @@ export function useSignupFields(): T.OnboardingField[] {
 }
 /** Public site domain (`<slug>.<site_domain>`), from the SDK public config. */
 export function useSiteDomain(): string | null { return K.usePublicConfig().data?.site_domain ?? null }
+/** Signup gate from the public config. `signup_mode` is not in the vendored SDK types yet, so it is read defensively. */
+export function usePublicConfig(): T.PublicConfig {
+  const q = K.usePublicConfig(); const d = q.data as { public_signup?: boolean; signup_mode?: string } | undefined
+  return { publicSignup: d?.public_signup === true, signupMode: d?.signup_mode, loaded: !!d }
+}
 /** Live address check against the SDK slug-availability endpoint. */
 export function useSlugAvailability(slug: string): { data?: T.SlugCheck; isFetching: boolean; isError?: boolean } {
   const q = K.useSlugAvailability(slug)
