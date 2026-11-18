@@ -2,12 +2,20 @@
 
 [![CI](https://github.com/tridz-open/frappe-saaskit-starter/actions/workflows/ci.yml/badge.svg)](https://github.com/tridz-open/frappe-saaskit-starter/actions/workflows/ci.yml)
 
-An unbranded SaaS front end (Vite + React 19 + TypeScript) with the pages most SaaS products need: landing, pricing, signup/login/password reset, onboarding, checkout, provisioning progress, and a customer console (instances, backups, plan, billing, invoices, team, account, support).
+The front end for launching a Frappe app as SaaS on Frappe Cloud. Nothing else. It is the customer-facing site and console you put in front of your app when you sell it as a subscription, with each tenant hosted on Frappe Cloud and the whole thing backed by the [`saas_core`](https://github.com/tridz-open/saas_core) control plane. It is not a generic SaaS template.
+
+Built with Vite, React 19 and TypeScript, it ships the pages that selling a Frappe app as SaaS needs: landing, pricing, signup/login/password reset, onboarding, checkout, provisioning progress, and a customer console (instances, backups, plan, billing, invoices, team, account, support).
+
+The stack:
+
+- [`saas_core`](https://github.com/tridz-open/saas_core): the Frappe control-plane app that owns plans, subscriptions, billing and tenant provisioning on Frappe Cloud.
+- [`frappe-saaskit-sdk`](https://github.com/tridz-open/frappe-saaskit-sdk): the TypeScript SDK (`@frappe-saaskit/client` and `@frappe-saaskit/react`) this front end uses to talk to `saas_core`.
+- This repo: the front end (landing to customer console) you fork and brand for your product.
 
 It runs in two modes:
 
 - **Fixture mode** (default): in-memory demo data, no backend. Good for trying the UI and building pages.
-- **Live mode** (`VITE_DATA_ADAPTER=saaskit`): talks to a Frappe site running the `saas_core` control-plane app through the TypeScript SDK [`frappe-saaskit-sdk`](https://github.com/tridz-open/frappe-saaskit-sdk) (`@frappe-saaskit/client` and `@frappe-saaskit/react`). `saas_core` is not public yet, so fixture mode is the way to try the starter today; the SDK is installed from the vendored tarballs in `vendor/saaskit` until it is published to npm.
+- **Live mode** (`VITE_DATA_ADAPTER=saaskit`): talks to a Frappe site running `saas_core` through the SDK. The SDK is installed from the vendored tarballs in `vendor/saaskit` until it is published to npm.
 
 ## Status: alpha
 
@@ -59,7 +67,7 @@ Captured at 1440x900 from fixture mode (`npm run dev`, no backend). Full set, in
 | npm | 10+ | this repo |
 | git | any | cloning |
 
-For live mode you also need a Frappe v16 bench with `saas_core` installed (see the `saas_core` README).
+For live mode you also need a Frappe v16 bench with `saas_core` installed (see the [`saas_core` README](https://github.com/tridz-open/saas_core)).
 
 ## Quickstart (fixture mode, no backend, no SDK)
 
@@ -108,7 +116,7 @@ Or set `VITE_FIXTURE_SCENARIO=<name>` for the whole dev session.
 
 ## Run against a real saas_core (live mode)
 
-1. Install `saas_core` on a Frappe site and create at least one plan (see the `saas_core` README), and install the SDK (above).
+1. Install `saas_core` on a Frappe site and create at least one plan (see the [`saas_core` README](https://github.com/tridz-open/saas_core)), and install the SDK (above).
 2. Copy the env file and edit it:
 
    ```bash
@@ -229,7 +237,7 @@ The starter never sends a `template` itself: which recipe a new workspace is bui
 }
 ```
 
-Full field reference, hook shapes, backup sources and the shared-versus-dedicated bench setting: [saas_core `docs/TEMPLATES.md`](https://github.com/tridz-dev/saas_core/blob/main/docs/TEMPLATES.md) (saas_core is not public yet; the file ships with it).
+Full field reference, hook shapes, backup sources and the shared-versus-dedicated bench setting: [saas_core `docs/TEMPLATES.md`](https://github.com/tridz-dev/saas_core/blob/main/docs/TEMPLATES.md).
 
 ## Design system
 
@@ -261,7 +269,7 @@ The starter is **unbranded but not unstyled**. It uses ui-sdk's default theme, w
 ## Related repositories
 
 - [frappe-saaskit-sdk](https://github.com/tridz-open/frappe-saaskit-sdk): the TypeScript SDK (`@frappe-saaskit/*`).
-- `saas_core`: the Frappe control-plane app the SDK talks to. Not public yet; use fixture mode in the meantime.
+- `saas_core`: the Frappe control-plane app the SDK talks to. Public at [tridz-open/saas_core](https://github.com/tridz-open/saas_core).
 
 ## Note to the Frappe team
 
