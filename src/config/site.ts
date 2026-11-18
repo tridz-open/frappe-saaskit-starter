@@ -31,7 +31,10 @@ export const site = {
     { label: 'Help and support', to: '/console/support' },
   ] as NavItem[],
   /** Extra sidebar group for operators: shown only to users holding `adminRole`. */
-  adminNav: [] as NavItem[],
+  adminNav: [
+    { label: 'Tenants', to: '/console/admin/tenants' },
+    { label: 'Beta access', to: '/console/admin/beta' },
+  ] as NavItem[],
   adminRole: 'SaaS Admin',
   plans: [
     { id: 'starter', name: 'Starter', price: 10, interval: 'month' as const, features: ['1 instance', 'Daily backups'] },

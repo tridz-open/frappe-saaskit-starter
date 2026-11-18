@@ -5,6 +5,7 @@ import { RequireAuth } from '../components/RequireAuth'
 import { accountChildren } from './account'
 import { billingChildren } from './billing'
 import { supportChildren } from './support'
+import { adminChildren } from './admin'
 const InstancesPage = lazy(() => import('../pages/console/InstancesPage').then((m) => ({ default: m.InstancesPage })))
 const InstanceDetailPage = lazy(() => import('../pages/console/InstanceDetailPage').then((m) => ({ default: m.InstanceDetailPage })))
 const CreateInstancePage = lazy(() => import('../pages/console/CreateInstancePage').then((m) => ({ default: m.CreateInstancePage })))
@@ -23,6 +24,7 @@ export const consoleRoutes: RouteObject[] = [
       ...billingChildren,
       ...accountChildren,
       ...supportChildren,
+      ...adminChildren,
     ],
   },
 ]

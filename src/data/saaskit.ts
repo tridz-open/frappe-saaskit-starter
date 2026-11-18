@@ -9,6 +9,7 @@ import type * as T from './types'
 import { CheckoutDismissed } from './types'
 import { fieldsFromSchema, takeRecipeFields } from './recipeFields'
 import { site } from '../config/site'
+import { betaAccessApi } from './betaAccessApi'
 import { LIVE_CAPABILITIES, toUser, type MeLike } from './liveMapping'
 
 const BASE = (import.meta.env?.VITE_SAAS_API_URL as string | undefined) ?? ''
@@ -282,4 +283,25 @@ export function useInvoicePdf(invoiceId: string) {
 export function useAcceptInvite(): (token: string) => Promise<void> {
   const m = K.useAcceptInvite()
   return async (token) => { await m.mutateAsync(token) }
+}
+
+// --- Admin (operators only; the server answers 403 to everyone else) ---
+const isForbidden = (e: unknown) => (e as { status?: number } | null)?.status === 403
+export function useAdminTenants(): { tenants: T.AdminTenant[] } & T.AdminListState {
+  const q = K.useAdminTenants()
+  const tenants = (q.data ?? []).map((t): T.AdminTenant => ({ id: t.name, slug: t.slug, url: t.url ?? '', status: t.status, planId: t.plan, createdAt: t.created_at ?? '' }))
+  return { tenants, loading: q.isLoading, error: q.isError && !isForbidden(q.error), forbidden: isForbidden(q.error), refresh: () => void q.refetch() }
+}
+export function useAdminBetaAccess() {
+  const qc = useQueryClient()
+  const KEY = ['saas', 'admin', 'beta-access']
+  const q = useQuery({ queryKey: KEY, queryFn: betaAccessApi.list, retry: (n, e) => !isForbidden(e) && n < 2 })
+  const done = async <R,>(p: Promise<R>) => { const r = await p; await qc.invalidateQueries({ queryKey: KEY }); return r }
+  return {
+    entries: q.data?.entries ?? [], signupMode: q.data?.signupMode ?? '', loading: q.isLoading, error: q.isError && !isForbidden(q.error), forbidden: isForbidden(q.error),
+    refresh: () => void q.refetch(),
+    add: (entries: string[], sendInvite: boolean, note?: string) => done(betaAccessApi.add(entries, sendInvite, note)),
+    async remove(pattern: string) { await done(betaAccessApi.remove(pattern)) },
+    async resend(email: string) { await done(betaAccessApi.resend(email)) },
+  }
 }

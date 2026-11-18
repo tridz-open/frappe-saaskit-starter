@@ -52,3 +52,11 @@ export type OnboardingField = {
 }
 
 export type SlugCheck = { slug: string; available: boolean; reason: null | 'invalid' | 'reserved' | 'taken'; message: string; suggestion: string | null }
+
+/** Operator view of a customer workspace (admin only). */
+export type AdminTenant = { id: string; slug: string; url: string; status: string; planId: string; createdAt: string }
+/** One beta-access allowlist row: an exact email or an `@domain` pattern. Account fields are null for domains. */
+export type BetaEntry = { pattern: string; kind: 'email' | 'domain'; note: string | null; invitedAt: string | null; accountExists: boolean | null; verified: boolean | null; hasTenant: boolean | null }
+export type BetaAddResult = { added: string[]; alreadyListed: string[]; invitesSent: string[]; invitesFailed: string[]; skippedDomains: string[] }
+/** Shared shape of the admin list hooks. `forbidden` = the caller is not an operator (HTTP 403). */
+export type AdminListState = { loading: boolean; error: boolean; forbidden: boolean; refresh: () => void }

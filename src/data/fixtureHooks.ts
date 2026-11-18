@@ -213,3 +213,31 @@ export function useInvoicePdf(invoiceId: string) { return { url: invoicePdfUrl(i
 export function useCapabilities(): T.Capabilities {
   return { sessions: true, notifications: true, usage: true, apiTokens: true, backupDownload: false, cancelDeletion: true, emailVerification: true }
 }
+
+// --- Admin (operators). Fixtures keep an in-memory list so the pages are demoable offline. ---
+const adminTenants: T.AdminTenant[] = [
+  { id: 't1', slug: 'acme', url: 'https://acme.example.test', status: 'active', planId: 'pro', createdAt: '2026-01-12T09:00:00Z' },
+  { id: 't2', slug: 'globex', url: '', status: 'provisioning', planId: 'starter', createdAt: '2026-02-03T09:00:00Z' },
+]
+export function useAdminTenants(): { tenants: T.AdminTenant[] } & T.AdminListState {
+  const { data, loading, refresh } = useAsync(() => adminTenants, [] as T.AdminTenant[])
+  return { tenants: data, loading, error: false, forbidden: false, refresh: () => void refresh() }
+}
+let betaEntries: T.BetaEntry[] = [
+  { pattern: 'ada@example.test', kind: 'email', note: 'Pilot', invitedAt: null, accountExists: true, verified: true, hasTenant: false },
+  { pattern: '@example.org', kind: 'domain', note: null, invitedAt: null, accountExists: null, verified: null, hasTenant: null },
+]
+export function useAdminBetaAccess() {
+  const { data, loading, refresh } = useAsync(() => betaEntries, [] as T.BetaEntry[])
+  return {
+    entries: data, signupMode: 'invite', loading, error: false, forbidden: false, refresh: () => void refresh(),
+    async add(entries: string[], _sendInvite: boolean, note?: string): Promise<T.BetaAddResult> {
+      const fresh = entries.filter((e) => !betaEntries.some((b) => b.pattern === e))
+      betaEntries = [...betaEntries, ...fresh.map((p): T.BetaEntry => ({ pattern: p, kind: p.startsWith('@') ? 'domain' : 'email', note: note || null, invitedAt: null, accountExists: null, verified: null, hasTenant: null }))]
+      await refresh()
+      return { added: fresh, alreadyListed: entries.filter((e) => !fresh.includes(e)), invitesSent: [], invitesFailed: [], skippedDomains: [] }
+    },
+    async remove(pattern: string) { betaEntries = betaEntries.filter((b) => b.pattern !== pattern); await refresh() },
+    async resend(_email: string) {},
+  }
+}
