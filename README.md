@@ -144,7 +144,7 @@ const { App } = createSaasApp({
 })
 ```
 
-- **Site config** (`src/config/site.ts`): name, logo (text or URL), tagline, nav, consoleNav, plans, legalLinks, and `labels` (layout UI strings). The `site` option is merged into this object, so partial overrides work.
+- **Site config** (`src/config/site.ts`): name, logo (text or URL), `logoHref`, tagline, nav, consoleNav, plans, legalLinks, and `labels` (layout UI strings). The `site` option is merged into this object, so partial overrides work.
 - **Theme tokens**: the `theme` map of CSS custom properties is set on `:root` only. No other CSS is shipped; defaults come from `@ui-sdk/core/web.css`.
 - **Route overrides**: `routes.override` maps a path (matched at any nesting depth) to a partial route object merged over the default (e.g. a new `element`). `routes.extra` adds top-level routes before the 404 catch-all.
 - **Slots**: `Logo`, `Footer`, `LandingHero` (plus any custom name) are components read from context via `useSlots()`. Layouts use `Logo` and `Footer`; pages read `LandingHero` with `useSlots().LandingHero`. `SaasSlots` is exported.
@@ -166,6 +166,9 @@ Pages and components can be wrapped in a route override to change behaviour with
   - `checkSlug?: (slug, signal) => Promise<SlugCheck>`: replaces the data adapter's `useSlugAvailability` for the address field. It is called with a valid, debounced slug and an `AbortSignal` that fires when the user keeps typing. Resolve with `{ slug, available, reason: null | 'invalid' | 'reserved' | 'taken', message, suggestion }` (`message` is shown as the error, `suggestion` offers a one-click replacement); reject when the check cannot be done, which shows a soft warning and does not block the user.
 - **`ProvisioningPage`** (`src/pages/provisioning/ProvisioningPage.tsx`)
   - `readyAction?: ReactNode | ((state) => ReactNode)`: replaces the default "Open my workspace" link once provisioning is active (also when the state has no `url`). Omitted = today's behaviour.
+- **Navigation items** (`site.nav`, `site.consoleNav`, `site.adminNav`)
+  - Internal: `{ label, to }` (router link, unchanged). External: `{ label, href, newTab? }`, rendered as a plain anchor; `newTab` adds `target="_blank" rel="noopener noreferrer"`. External console items appear in the "More" group with an external-link icon and are never marked current. Type: `NavItem`.
+  - `site.logoHref: string | null`: where the logo links. `null` (default) = the app home route; a URL sends it to another site.
 <!-- props:end -->
 
 ## Data adapters

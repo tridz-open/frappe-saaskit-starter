@@ -5,6 +5,8 @@ import { Brand } from '../components/Brand'
 import { Footer } from '../components/Footer'
 import { AppToasts } from '../components/AppToasts'
 import { useSaas } from '../app/context'
+import type { InternalNavItem, NavItem } from '../config/site'
+import { isExternal, navKey as itemKey, NavAnchor } from '../lib/nav'
 
 const css = `
 [data-header="public"] { padding: 0; gap: 0; }
@@ -49,10 +51,10 @@ export function PublicLayout() {
     return () => document.removeEventListener('keydown', onKey)
   }, [open])
 
-  const cta = site.nav.find((n) => n.to === '/signup') ?? null
+  const cta = site.nav.find((n): n is InternalNavItem => n.to === '/signup') ?? null
   const links = site.nav.filter((n) => n !== cta)
-  const renderLink = (n: { label: string; to: string }) =>
-    isAnchor(n.to) ? <Link to={n.to}>{n.label}</Link> : <NavLink to={n.to} end>{n.label}</NavLink>
+  const renderLink = (n: NavItem) =>
+    isExternal(n) ? <NavAnchor item={n} /> : isAnchor(n.to) ? <Link to={n.to}>{n.label}</Link> : <NavLink to={n.to} end>{n.label}</NavLink>
 
   return (
     <>
@@ -62,9 +64,9 @@ export function PublicLayout() {
         <div data-slot="header-inner">
           <Brand />
           <nav data-slot="public-nav" aria-label={site.labels.mainNav}>
-            <ul>{links.filter((n) => n.to !== '/login').map((n) => <li key={n.to}>{renderLink(n)}</li>)}</ul>
+            <ul>{links.filter((n) => n.to !== '/login').map((n) => <li key={itemKey(n)}>{renderLink(n)}</li>)}</ul>
             <ul>
-              {links.filter((n) => n.to === '/login').map((n) => <li key={n.to}>{renderLink(n)}</li>)}
+              {links.filter((n) => n.to === '/login').map((n) => <li key={itemKey(n)}>{renderLink(n)}</li>)}
               {cta && <li><Button data-variant="solid" data-size="sm" render={<Link to={cta.to} />}>{cta.label}</Button></li>}
             </ul>
           </nav>
@@ -76,7 +78,7 @@ export function PublicLayout() {
           </button>
         </div>
         <div id="public-menu" data-slot="menu-sheet" hidden={!open}>
-          {links.map((n) => <Link key={n.to} to={n.to}>{n.label}</Link>)}
+          {links.map((n) => <NavAnchor key={itemKey(n)} item={n} />)}
         </div>
       </header>
       <main id="main"><Outlet /></main>

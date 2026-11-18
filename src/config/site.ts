@@ -1,8 +1,16 @@
 import type { OnboardingField, Plan } from '../data/types'
 
+/** In-app route link. */
+export type InternalNavItem = { label: string; to: string; href?: undefined; newTab?: undefined }
+/** Link to another site or document: rendered as a plain anchor. `newTab` adds `target="_blank" rel="noopener noreferrer"`. */
+export type ExternalNavItem = { label: string; href: string; newTab?: boolean; to?: undefined }
+export type NavItem = InternalNavItem | ExternalNavItem
+
 export const site = {
   name: 'Your SaaS',
   logo: 'Your SaaS', // text or image URL
+  /** Where the logo links to. null = the app's home route; set a URL to send it to an external site. */
+  logoHref: null as string | null,
   tagline: 'Short tagline goes here',
   supportEmail: 'support@example.com', // placeholder: the Support page hides it until a real address is set
   currency: 'USD',
@@ -11,7 +19,7 @@ export const site = {
     { label: 'Pricing', to: '/pricing' },
     { label: 'Log in', to: '/login' },
     { label: 'Sign up', to: '/signup' },
-  ],
+  ] as NavItem[],
   consoleNav: [
     { label: 'Workspaces', to: '/console' },
     { label: 'Backups', to: '/console/backups' },
@@ -19,9 +27,9 @@ export const site = {
     { label: 'Team', to: '/console/team' },
     { label: 'Account', to: '/console/account' },
     { label: 'Help and support', to: '/console/support' },
-  ],
+  ] as NavItem[],
   /** Extra sidebar group for operators: shown only to users holding `adminRole`. */
-  adminNav: [] as { label: string; to: string }[],
+  adminNav: [] as NavItem[],
   adminRole: 'SaaS Admin',
   plans: [
     { id: 'starter', name: 'Starter', price: 10, interval: 'month' as const, features: ['1 instance', 'Daily backups'] },
