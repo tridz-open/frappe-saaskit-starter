@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom'
 import { AuthForm } from './AuthForm'
 import { AuthLink, AuthLinks } from './AuthLink'
 
+import { ExperimentalBadge } from '../../components/primitives'
 export function ResetPassword() {
   const t = useT(); const { resetPassword } = useAuth(); const [done, setDone] = useState(false)
   const [params] = useSearchParams()
@@ -14,6 +15,7 @@ export function ResetPassword() {
   if (!token && !done) {
     return (
       <section aria-labelledby="auth-title">
+        <p><ExperimentalBadge /></p>
         <h1 id="auth-title">{t('auth.reset.title')}</h1>
         <p role="alert" style={{ color: 'var(--color-danger, #b42318)' }}>{t('auth.reset.missing')}</p>
         <Button data-variant="solid" render={<Link to="/forgot-password" />}>{t('auth.reset.newLink')}</Button>
@@ -21,7 +23,7 @@ export function ResetPassword() {
     )
   }
   return (
-    <AuthForm title={t('auth.reset.title')} doneTitle={t('auth.reset.doneTitle')} submitLabel={t('auth.reset.submit')} busyLabel={t('auth.reset.busy')}
+    <AuthForm experimental title={t('auth.reset.title')} doneTitle={t('auth.reset.doneTitle')} submitLabel={t('auth.reset.submit')} busyLabel={t('auth.reset.busy')}
       done={done ? <><p>{t('auth.reset.done')}</p><Button data-variant="solid" render={<Link to="/login" />}>{t('auth.reset.loginNow')}</Button></> : null}
       errorMessages={{ invalid_token: t('auth.reset.missing') }}
       fields={[{ name: 'password', label: t('auth.newPassword'), type: 'password', autoComplete: 'new-password', minLength: 8, requiredMsg: t('auth.newPassword.required'), hint: t('auth.passwordHint', { min: 8 }) }]}

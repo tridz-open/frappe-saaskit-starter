@@ -59,7 +59,7 @@ export function TicketsPage() {
   )
   return (
     <section aria-labelledby="support-h">
-      <PageHeader title={<span id="support-h">{t('support.title')}</span>} description={email ? t('support.contact', { email }) : undefined}
+      <PageHeader experimental title={<span id="support-h">{t('support.title')}</span>} description={email ? t('support.contact', { email }) : undefined}
         actions={first ? undefined : <Button data-variant="solid" onClick={() => formRef.current?.scrollIntoView?.({ behavior: 'smooth', block: 'start' })}>{t('support.newCta')}</Button>} />
       <Stack>
         {first && form}

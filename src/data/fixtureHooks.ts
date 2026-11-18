@@ -211,7 +211,7 @@ export function useInvoicePdf(invoiceId: string) { return { url: invoicePdfUrl(i
 
 /** Fixture mode demos every feature except real backup downloads (there is no file to serve). */
 export function useCapabilities(): T.Capabilities {
-  return { sessions: true, notifications: true, usage: true, apiTokens: true, backupDownload: false, cancelDeletion: true, emailVerification: true }
+  return { sessions: true, notifications: true, apiTokens: true, backupDownload: false, cancelDeletion: true, emailVerification: true }
 }
 
 // --- Admin (operators). Fixtures keep an in-memory list so the pages are demoable offline. ---

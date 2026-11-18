@@ -11,6 +11,18 @@ It runs in two modes:
 
 ## Status: alpha
 
+### Experimental features
+
+These are in the alpha but have not been verified against a live `saas_core` (fixture or mock-tested only). Their page headers carry an "Experimental" badge:
+
+- Team invites and roles (`/console/team`, accept invite)
+- API tokens (Account page)
+- Support tickets
+- Invoice PDF
+- Password reset (forgot and reset pages)
+- Admin pages (admin tenants, beta access)
+
+
 This is an early release. Expect breaking changes to the extension API (`createSaasApp`), the data hooks and the CSS tokens.
 
 What works:
@@ -22,10 +34,10 @@ What works:
 What does not work yet, or has known gaps:
 
 - **Live mode and the SDK install.** The SDK is not on npm yet; see [Install the SDK for live mode](#install-the-sdk-for-live-mode). Fixture mode does not need it.
-- In live mode, usage, sessions, notifications, API tokens and email verification are hidden (`useCapabilities()`), because `saas_core` has no endpoints for them yet. Saved payment methods are not listed; the page links to the gateway portal instead.
+- In live mode, sessions, notifications and cancel-deletion are hidden, as is backup download (the download link returned 500 live without offsite backup config). Actions the live API does not support (removal approval, session revoke, mark notification read) throw a "not supported" error instead of silently succeeding (`useCapabilities()`), because `saas_core` has no endpoints for them yet. Saved payment methods are not listed; the page links to the gateway portal instead.
 - Terms and Privacy pages are templates with a visible banner. Replace them with your own text via `site.copy` before going live.
 - In fixture mode the invoice download serves a bundled sample PDF; in live mode it links to `saas_core.api.v1.invoices.pdf`.
-- Unit tests (vitest) cover the data layer and i18n only; there are no automated tests for live mode, which has been exercised manually against `saas_core`.
+- Unit tests: 61 vitest tests in 12 files cover the data layer, i18n, live mappers, admin pages and a few components. There are no automated tests for live mode, which has been exercised manually against `saas_core`.
 - Depends on pre-release packages: `@ui-sdk/*` 0.1.0 betas, TypeScript 7, Vite 8.
 
 ## Prerequisites
@@ -55,17 +67,17 @@ The SDK ([frappe-saaskit-sdk](https://github.com/tridz-open/frappe-saaskit-sdk))
 
 ```json
 "dependencies": {
-  "@frappe-saaskit/client": "https://github.com/tridz-open/frappe-saaskit-sdk/releases/download/v0.1.0-alpha.1/frappe-saaskit-client-0.1.0-alpha.1.tgz",
-  "@frappe-saaskit/react": "https://github.com/tridz-open/frappe-saaskit-sdk/releases/download/v0.1.0-alpha.1/frappe-saaskit-react-0.1.0-alpha.1.tgz"
+  "@frappe-saaskit/client": "https://github.com/tridz-open/frappe-saaskit-sdk/releases/download/v0.1.0-alpha.2/frappe-saaskit-client-0.1.0-alpha.2.tgz",
+  "@frappe-saaskit/react": "https://github.com/tridz-open/frappe-saaskit-sdk/releases/download/v0.1.0-alpha.2/frappe-saaskit-react-0.1.0-alpha.2.tgz"
 },
 "overrides": {
-  "@frappe-saaskit/client": "https://github.com/tridz-open/frappe-saaskit-sdk/releases/download/v0.1.0-alpha.1/frappe-saaskit-client-0.1.0-alpha.1.tgz"
+  "@frappe-saaskit/client": "https://github.com/tridz-open/frappe-saaskit-sdk/releases/download/v0.1.0-alpha.2/frappe-saaskit-client-0.1.0-alpha.2.tgz"
 }
 ```
 
-**Until the npm publish, install from the vendored tarballs in `vendor/saaskit/`.** If you prefer to fetch the release assets yourself: download the `.tgz` assets from the release into `vendor/saaskit/` and use `file:` specs with the same override block, for example `"@frappe-saaskit/client": "file:vendor/saaskit/frappe-saaskit-client-0.1.0-alpha.1.tgz"`.
+**Use SDK `0.1.0-alpha.2`.** Download the two `.tgz` assets from the [frappe-saaskit-sdk releases](https://github.com/tridz-open/frappe-saaskit-sdk/releases) (tag `v0.1.0-alpha.2`) and use the release URLs above, or save them in `vendor/saaskit/` and use `file:` specs with the same override block, for example `"@frappe-saaskit/client": "file:vendor/saaskit/frappe-saaskit-client-0.1.0-alpha.2.tgz"`.
 
-**This checkout currently** links a local SDK build with `file:../saas-kit/packages/client` and `file:../saas-kit/packages/react` (clone the SDK as `../saas-kit` and run `pnpm install && pnpm build` there). `npm install` does not fail if that folder is missing; it leaves a dangling link, which only matters for live mode and `npm run typecheck`.
+**Known mismatch:** `package.json` and `vendor/saaskit/` in this checkout still point at the `0.1.0-alpha.1` tarballs; they have not been re-vendored to alpha.2 yet. The live adapter reads `Me.email_verified`, which the alpha.1 types do not declare (see `src/data/liveMapping.ts`). The SDK is only needed for live mode and for `npm run typecheck`; fixture mode does not use it.
 
 ## Run in fixture mode (no backend)
 
@@ -104,7 +116,7 @@ Cookie auth needs the app and the API on the **same origin**. Build with `VITE_D
 
 | Variable | Default | Meaning |
 |---|---|---|
-| `VITE_DATA_ADAPTER` | fixtures | `saaskit` switches to the live SDK adapter |
+| `VITE_DATA_ADAPTER` | fixtures when unset | `saaskit` switches to the live SDK adapter. Note: `.env.example` sets it to `saaskit`, so `cp .env.example .env.local` enables live mode; remove or change the line for fixture mode |
 | `VITE_SAAS_API_URL` | `''` (same origin) | Frappe site origin if different from the app |
 | `SAAS_BACKEND_URL` | `http://localhost:8000` | dev/preview proxy target (not bundled) |
 | `VITE_FIXTURE_SCENARIO` | `default` | fixture scenario when no `?scenario=` is given |
@@ -181,7 +193,7 @@ createSaasApp({ data: await loadSaaskitAdapter() })           // whole saas-kit 
 createSaasApp({ data: { useTickets: myTicketsHook } })        // partial: override only some hooks
 ```
 
-`setDataAdapter(partial)` is exported too; a `DataProvider` in the adapter wraps the app. `useCapabilities()` tells pages which features the backend really serves; anything it marks `false` is hidden instead of faked. With the saaskit adapter that is usage, sessions, notifications, API tokens and email verification. Team hooks act on the user's first active tenant. `useInstances().remove(id, confirmSlug?)` passes `confirm_slug` (defaults to the instance slug).
+`setDataAdapter(partial)` is exported too; a `DataProvider` in the adapter wraps the app. `useCapabilities()` tells pages which features the backend really serves; anything it marks `false` is hidden instead of faked. With the saaskit adapter that is sessions, notifications and backup download. Team hooks act on the user's first active tenant. `useInstances().remove(id, confirmSlug?)` passes `confirm_slug` (defaults to the instance slug).
 
 ## Provisioning templates (Frappe Cloud)
 
