@@ -101,7 +101,7 @@ The SDK ([frappe-saaskit-sdk](https://github.com/tridz-open/frappe-saaskit-sdk))
 
 **Use SDK `0.1.0-alpha.3`.** Download the two `.tgz` assets from the [frappe-saaskit-sdk releases](https://github.com/tridz-open/frappe-saaskit-sdk/releases) (tag `v0.1.0-alpha.3`) and use the release URLs above, or save them in `vendor/saaskit/` and use `file:` specs with the same override block, for example `"@frappe-saaskit/client": "file:vendor/saaskit/frappe-saaskit-client-0.1.0-alpha.3.tgz"`.
 
-**Vendored copy:** `package.json` and `vendor/saaskit/` in this checkout use the `0.1.0-alpha.3` tarballs (client, react and mock). The SDK is only needed for live mode and for `npm run typecheck`; fixture mode does not use it. **Duplicate workspace is not supported in live mode:** saas_core removed `tenants.duplicate` (API 2.0.0-alpha.1) and SDK `0.1.0-alpha.3` has no duplicate call, so the action is unavailable against a live backend.
+**Vendored copy:** `package.json` and `vendor/saaskit/` in this checkout use the `0.1.0-alpha.3` tarballs (client, react and mock). The SDK is only needed for live mode and for `npm run typecheck`; fixture mode does not use it. **Duplicate workspace is hidden in live mode** (the `duplicate` capability is `false`, so the "Make a copy" button does not render): saas_core removed `tenants.duplicate` (API 2.0.0-alpha.1) and SDK `0.1.0-alpha.3` has no duplicate call, so it is unavailable against a live backend. Fixture mode still offers it.
 
 ## Run in fixture mode (no backend)
 
@@ -217,7 +217,7 @@ createSaasApp({ data: await loadSaaskitAdapter() })           // whole saas-kit 
 createSaasApp({ data: { useTickets: myTicketsHook } })        // partial: override only some hooks
 ```
 
-`setDataAdapter(partial)` is exported too; a `DataProvider` in the adapter wraps the app. `useCapabilities()` tells pages which features the backend really serves; anything it marks `false` is hidden instead of faked. With the saaskit adapter that is sessions, notifications and backup download. Team hooks act on the user's first active tenant. `useInstances().remove(id, confirmSlug?)` passes `confirm_slug` (defaults to the instance slug).
+`setDataAdapter(partial)` is exported too; a `DataProvider` in the adapter wraps the app. `useCapabilities()` tells pages which features the backend really serves; anything it marks `false` is hidden instead of faked. With the saaskit adapter that is sessions, notifications, backup download and duplicate workspace. Team hooks act on the user's first active tenant. `useInstances().remove(id, confirmSlug?)` passes `confirm_slug` (defaults to the instance slug).
 
 ## Provisioning templates (Frappe Cloud)
 

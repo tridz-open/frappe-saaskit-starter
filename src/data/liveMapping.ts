@@ -16,6 +16,7 @@ export function toUser(me: MeLike): T.User {
 /** What the live API can really serve. Anything false is hidden in the UI rather than faked. */
 export const LIVE_CAPABILITIES: T.Capabilities = {
   sessions: false, notifications: false, backupDownload: false, cancelDeletion: false,
+  duplicate: false, // saas_core has no duplicate call (API 2.0.0-alpha.1); duplicate() throws notSupported
   // backupDownload is false: the fcctl download link returned 500 live (no offsite config).
   apiTokens: true, // useApiTokens is implemented against saas_core api/v1/api_tokens
   emailVerification: true, // Me.email_verified + request/confirm email verification

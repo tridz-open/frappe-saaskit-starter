@@ -23,5 +23,6 @@ describe('live capabilities', () => {
     expect(LIVE_CAPABILITIES.apiTokens).toBe(true)
     expect(LIVE_CAPABILITIES.sessions).toBe(false)
     expect(LIVE_CAPABILITIES.notifications).toBe(false)
+    expect(LIVE_CAPABILITIES.duplicate).toBe(false)
   })
 })
