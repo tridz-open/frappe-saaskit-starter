@@ -1,13 +1,13 @@
 # frappe-saaskit-starter
 
-[![CI](https://github.com/tridz-dev/frappe-saaskit-starter/actions/workflows/ci.yml/badge.svg)](https://github.com/tridz-dev/frappe-saaskit-starter/actions/workflows/ci.yml)
+[![CI](https://github.com/tridz-open/frappe-saaskit-starter/actions/workflows/ci.yml/badge.svg)](https://github.com/tridz-open/frappe-saaskit-starter/actions/workflows/ci.yml)
 
 An unbranded SaaS front end (Vite + React 19 + TypeScript) with the pages most SaaS products need: landing, pricing, signup/login/password reset, onboarding, checkout, provisioning progress, and a customer console (instances, backups, plan, billing, invoices, team, account, support).
 
 It runs in two modes:
 
 - **Fixture mode** (default): in-memory demo data, no backend. Good for trying the UI and building pages.
-- **Live mode** (`VITE_DATA_ADAPTER=saaskit`): talks to a Frappe site running the `saas_core` control-plane app through the TypeScript SDK [`frappe-saaskit-sdk`](https://github.com/tridz-dev/frappe-saaskit-sdk) (`@frappe-saaskit/client` and `@frappe-saaskit/react`). `saas_core` is not public yet, so fixture mode is the way to try the starter today; the SDK is installed from the vendored tarballs in `vendor/saaskit` until it is published to npm.
+- **Live mode** (`VITE_DATA_ADAPTER=saaskit`): talks to a Frappe site running the `saas_core` control-plane app through the TypeScript SDK [`frappe-saaskit-sdk`](https://github.com/tridz-open/frappe-saaskit-sdk) (`@frappe-saaskit/client` and `@frappe-saaskit/react`). `saas_core` is not public yet, so fixture mode is the way to try the starter today; the SDK is installed from the vendored tarballs in `vendor/saaskit` until it is published to npm.
 
 ## Status: alpha
 
@@ -41,7 +41,7 @@ For live mode you also need a Frappe v16 bench with `saas_core` installed (see t
 ## Quickstart (fixture mode, no backend, no SDK)
 
 ```bash
-git clone https://github.com/tridz-dev/frappe-saaskit-starter.git && cd frappe-saaskit-starter
+git clone https://github.com/tridz-open/frappe-saaskit-starter.git && cd frappe-saaskit-starter
 npm install && npm run dev
 ```
 
@@ -49,17 +49,17 @@ Open http://localhost:5173. If `npm install` cannot fetch the SDK (see below) fi
 
 ## Install the SDK for live mode
 
-The SDK ([frappe-saaskit-sdk](https://github.com/tridz-dev/frappe-saaskit-sdk)) is distributed as GitHub release tarballs until the `@frappe-saaskit` npm scope is registered. Versions are lock-stepped, so bump both URLs together.
+The SDK ([frappe-saaskit-sdk](https://github.com/tridz-open/frappe-saaskit-sdk)) is distributed as GitHub release tarballs until the `@frappe-saaskit` npm scope is registered. Versions are lock-stepped, so bump both URLs together.
 
 **Primary (public release):** in `package.json`, point both packages at the release assets and pin the inner client with an override (npm `overrides`; the react tarball depends on the client by exact version):
 
 ```json
 "dependencies": {
-  "@frappe-saaskit/client": "https://github.com/tridz-dev/frappe-saaskit-sdk/releases/download/v0.1.0-alpha.1/frappe-saaskit-client-0.1.0-alpha.1.tgz",
-  "@frappe-saaskit/react": "https://github.com/tridz-dev/frappe-saaskit-sdk/releases/download/v0.1.0-alpha.1/frappe-saaskit-react-0.1.0-alpha.1.tgz"
+  "@frappe-saaskit/client": "https://github.com/tridz-open/frappe-saaskit-sdk/releases/download/v0.1.0-alpha.1/frappe-saaskit-client-0.1.0-alpha.1.tgz",
+  "@frappe-saaskit/react": "https://github.com/tridz-open/frappe-saaskit-sdk/releases/download/v0.1.0-alpha.1/frappe-saaskit-react-0.1.0-alpha.1.tgz"
 },
 "overrides": {
-  "@frappe-saaskit/client": "https://github.com/tridz-dev/frappe-saaskit-sdk/releases/download/v0.1.0-alpha.1/frappe-saaskit-client-0.1.0-alpha.1.tgz"
+  "@frappe-saaskit/client": "https://github.com/tridz-open/frappe-saaskit-sdk/releases/download/v0.1.0-alpha.1/frappe-saaskit-client-0.1.0-alpha.1.tgz"
 }
 ```
 
@@ -248,7 +248,7 @@ Captured at 1440x900 from fixture mode (`npm run dev`, no backend). Full set, in
 
 ## Related repositories
 
-- [frappe-saaskit-sdk](https://github.com/tridz-dev/frappe-saaskit-sdk): the TypeScript SDK (`@frappe-saaskit/*`).
+- [frappe-saaskit-sdk](https://github.com/tridz-open/frappe-saaskit-sdk): the TypeScript SDK (`@frappe-saaskit/*`).
 - `saas_core`: the Frappe control-plane app the SDK talks to. Not public yet; use fixture mode in the meantime.
 
 ## Note to the Frappe team

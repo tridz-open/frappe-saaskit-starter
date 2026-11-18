@@ -42,12 +42,12 @@
   "description": "Customer-console starter for Frappe SaaS products: React + ui-sdk, runs on fixtures or a saas_core backend.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/tridz-dev/frappe-saaskit-starter.git"
+    "url": "git+https://github.com/tridz-open/frappe-saaskit-starter.git"
   },
   "bugs": {
-    "url": "https://github.com/tridz-dev/frappe-saaskit-starter/issues"
+    "url": "https://github.com/tridz-open/frappe-saaskit-starter/issues"
   },
-  "homepage": "https://github.com/tridz-dev/frappe-saaskit-starter#readme",
+  "homepage": "https://github.com/tridz-open/frappe-saaskit-starter#readme",
   "engines": {
     "node": ">=20.19"
   },
