@@ -10,6 +10,8 @@ import { AppToasts } from '../components/AppToasts'
 import { useSaas } from '../app/context'
 import { useAuth, useCapabilities, useNotifications, useSubscription } from '../data'
 import { useT } from '../i18n'
+import type { NavItem } from '../config/site'
+import { isExternal, navKey } from '../lib/nav'
 
 /* 16px stroke icons (inline: ui-sdk ships no icon set). */
 const P = {
@@ -25,6 +27,7 @@ const P = {
   bell: 'M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.94 1.94 0 0 0 3.4 0',
   menu: 'M4 6h16M4 12h16M4 18h16',
   close: 'M18 6 6 18M6 6l12 12',
+  external: 'M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5',
   chevron: 'm6 9 6 6 6-6',
 } as const
 type IconName = keyof typeof P
@@ -92,8 +95,8 @@ export function ConsoleLayout() {
 
   const known = new Set(GROUPS.flatMap((g) => g.paths))
   const items = site.consoleNav
-  const groups = GROUPS.map((g) => ({ ...g, items: g.paths.map((p) => items.find((n) => n.to === p)).filter((n): n is (typeof items)[number] => !!n) }))
-  const extra = items.filter((n) => !known.has(n.to))
+  const groups = GROUPS.map((g) => ({ ...g, items: g.paths.map((p) => items.find((n) => n.to === p)).filter((n): n is NavItem => !!n) }))
+  const extra = items.filter((n) => isExternal(n) || !known.has(n.to))
   if (extra.length) groups.push({ id: 'more', paths: [], items: extra })
   if (site.adminNav.length && user?.roles?.includes(site.adminRole)) groups.push({ id: 'admin', paths: [], items: site.adminNav })
 
@@ -105,13 +108,22 @@ export function ConsoleLayout() {
             <p id={`nav-${g.id}`} style={groupHeading}>{g.id === 'more' ? 'More' : g.id === 'admin' ? t('shell.group.admin') : t(`shell.group.${g.id}`)}</p>
             <NavigationMenuList>
               {g.items.map((n) => (
-                <NavigationMenuItem key={n.to}>
-                  <NavigationMenuLink current={isCurrent(n.to)} render={<Link to={n.to} onClick={() => setOpen(false)} />}>
-                    <span style={linkInner}>
-                      <Icon name={ICONS[n.to] ?? 'instances'} />
-                      <span>{n.label}</span>
-                    </span>
-                  </NavigationMenuLink>
+                <NavigationMenuItem key={navKey(n)}>
+                  {isExternal(n) ? (
+                    <NavigationMenuLink render={<a href={n.href} onClick={() => setOpen(false)} {...(n.newTab ? { target: '_blank', rel: 'noopener noreferrer' } : {})} />}>
+                      <span style={linkInner}>
+                        <Icon name="external" />
+                        <span>{n.label}</span>
+                      </span>
+                    </NavigationMenuLink>
+                  ) : (
+                    <NavigationMenuLink current={isCurrent(n.to)} render={<Link to={n.to} onClick={() => setOpen(false)} />}>
+                      <span style={linkInner}>
+                        <Icon name={ICONS[n.to] ?? 'instances'} />
+                        <span>{n.label}</span>
+                      </span>
+                    </NavigationMenuLink>
+                  )}
                 </NavigationMenuItem>
               ))}
             </NavigationMenuList>
