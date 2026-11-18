@@ -101,7 +101,7 @@ The SDK ([frappe-saaskit-sdk](https://github.com/tridz-open/frappe-saaskit-sdk))
 
 **Use SDK `0.1.0-alpha.3`.** Download the two `.tgz` assets from the [frappe-saaskit-sdk releases](https://github.com/tridz-open/frappe-saaskit-sdk/releases) (tag `v0.1.0-alpha.3`) and use the release URLs above, or save them in `vendor/saaskit/` and use `file:` specs with the same override block, for example `"@frappe-saaskit/client": "file:vendor/saaskit/frappe-saaskit-client-0.1.0-alpha.3.tgz"`.
 
-**Vendored copy:** `package.json` and `vendor/saaskit/` in this checkout use the `0.1.0-alpha.3` tarballs (client, react and mock). The SDK is only needed for live mode and for `npm run typecheck`; fixture mode does not use it. Duplicating a workspace is not available in live mode with this SDK version.
+**Vendored copy:** `package.json` and `vendor/saaskit/` in this checkout use the `0.1.0-alpha.3` tarballs (client, react and mock). The SDK is only needed for live mode and for `npm run typecheck`; fixture mode does not use it. **Duplicate workspace is not supported in live mode:** saas_core removed `tenants.duplicate` (API 2.0.0-alpha.1) and SDK `0.1.0-alpha.3` has no duplicate call, so the action is unavailable against a live backend.
 
 ## Run in fixture mode (no backend)
 
@@ -242,7 +242,7 @@ The starter never sends a `template` itself: which recipe a new workspace is bui
 }
 ```
 
-Full field reference, hook shapes, backup sources and the shared-versus-dedicated bench setting: [saas_core `docs/TEMPLATES.md`](https://github.com/tridz-dev/saas_core/blob/main/docs/TEMPLATES.md).
+Full field reference, hook shapes, backup sources and the shared-versus-dedicated bench setting: [saas_core `docs/TEMPLATES.md`](https://github.com/tridz-open/saas_core/blob/main/docs/TEMPLATES.md).
 
 ## Design system
 
