@@ -40,6 +40,17 @@ What does not work yet, or has known gaps:
 - Unit tests: 61 vitest tests in 12 files cover the data layer, i18n, live mappers, admin pages and a few components. There are no automated tests for live mode, which has been exercised manually against `saas_core`.
 - Depends on pre-release packages: `@ui-sdk/*` 0.1.0 betas, TypeScript 7, Vite 8.
 
+## Screenshots
+
+Captured at 1440x900 from fixture mode (`npm run dev`, no backend). Full set, including mobile (390 px) shots: [docs/screenshots/](docs/screenshots/).
+
+| | |
+|---|---|
+| ![Landing](docs/screenshots/landing.png)<br>Landing page with the neutral, rebrandable placeholder copy. | ![Pricing](docs/screenshots/pricing.png)<br>Pricing with three plans and a highlighted popular tier. |
+| ![Signup](docs/screenshots/signup.png)<br>Signup form. | ![Invite only](docs/screenshots/signup-invite-only.png)<br>Invite-only state (`?scenario=invite_only`) shown when signup needs an invitation. |
+| ![Checkout](docs/screenshots/checkout.png)<br>Checkout order summary before handing off to the payment provider. | ![Provisioning](docs/screenshots/provisioning-in-progress.png)<br>Provisioning in progress, with per-step status. |
+| ![Console instances](docs/screenshots/console-instances.png)<br>Console instances list with status and URL. | ![Billing](docs/screenshots/console-billing.png)<br>Billing: subscription, payment methods and invoices. |
+
 ## Prerequisites
 
 | Tool | Version | Why |
@@ -246,17 +257,6 @@ The starter is **unbranded but not unstyled**. It uses ui-sdk's default theme, w
   - Focus: `--color-ring` (defaults to `--ui-ring`, falls back to `--ui-primary`; `--focus-color` is an alias); every link, button, input and nav item gets a 2px outline with 2px offset on `:focus-visible`.
   - Tables scroll inside their container (`min-width: 34rem`) with a sticky first column below 768px.
 - **Override rule.** Never edit components to theme. Set variables on `:root` (or a subtree), for example `:root { --ui-primary: #4f46e5; --ui-radius: .5rem; --ui-font-sans: "Inter", sans-serif; }`, or target `[data-slot="…"]` selectors. Foundation rules are unlayered and come after `web.css`, so app CSS that loads later wins.
-
-## Screenshots
-
-Captured at 1440x900 from fixture mode (`npm run dev`, no backend). Full set, including mobile (390 px) shots: [docs/screenshots/](docs/screenshots/).
-
-| | |
-|---|---|
-| ![Landing](docs/screenshots/landing.png)<br>Landing page with the neutral, rebrandable placeholder copy. | ![Pricing](docs/screenshots/pricing.png)<br>Pricing with three plans and a highlighted popular tier. |
-| ![Signup](docs/screenshots/signup.png)<br>Signup form. | ![Invite only](docs/screenshots/signup-invite-only.png)<br>Invite-only state (`?scenario=invite_only`) shown when signup needs an invitation. |
-| ![Checkout](docs/screenshots/checkout.png)<br>Checkout order summary before handing off to the payment provider. | ![Provisioning](docs/screenshots/provisioning-in-progress.png)<br>Provisioning in progress, with per-step status. |
-| ![Console instances](docs/screenshots/console-instances.png)<br>Console instances list with status and URL. | ![Billing](docs/screenshots/console-billing.png)<br>Billing: subscription, payment methods and invoices. |
 
 ## Related repositories
 
