@@ -1,4 +1,6 @@
-# frappe-saaskit-starter
+# Frappe SaaS Kit Starter
+
+`frappe-saaskit-starter`
 
 [![CI](https://github.com/tridz-open/frappe-saaskit-starter/actions/workflows/ci.yml/badge.svg)](https://github.com/tridz-open/frappe-saaskit-starter/actions/workflows/ci.yml)
 
