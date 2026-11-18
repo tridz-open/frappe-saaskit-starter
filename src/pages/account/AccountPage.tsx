@@ -181,7 +181,7 @@ export function AccountPage() {
   const ticket = `/console/support?subject=${encodeURIComponent(t('account.danger.subject'))}&body=${encodeURIComponent(t('account.danger.body'))}`
   return (
     <div>
-      <PageHeader title={t('account.title')} />
+      <PageHeader experimental title={t('account.title')} />
       <Stack>
         <Tabs defaultValue="profile">
           <TabsList aria-label={t('account.tabs')}>

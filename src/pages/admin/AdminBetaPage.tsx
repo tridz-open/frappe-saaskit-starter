@@ -48,7 +48,7 @@ function Beta() {
 
   return (
     <section aria-labelledby="admin-beta-h">
-      <PageHeader title={<span id="admin-beta-h">{t('admin.beta.title')}</span>} description={t('admin.beta.lead', { mode: signupMode || '-' })} />
+      <PageHeader experimental title={<span id="admin-beta-h">{t('admin.beta.title')}</span>} description={t('admin.beta.lead', { mode: signupMode || '-' })} />
       <Stack>
         {status ?? (
           <>

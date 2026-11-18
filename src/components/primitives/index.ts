@@ -7,6 +7,7 @@ export { Alert } from "./Alert";
 export type { AlertProps } from "./Alert";
 export { EmptyState } from "./EmptyState";
 export type { EmptyStateProps } from "./EmptyState";
+export { ExperimentalBadge } from "./Experimental";
 export { PageHeader } from "./PageHeader";
 export { DescriptionList } from "./DescriptionList";
 export { Skeleton } from "./Skeleton";

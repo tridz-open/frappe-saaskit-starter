@@ -32,6 +32,7 @@ export default function InvoicePage() {
     <article aria-labelledby="inv-h" data-testid={`invoice-row-${inv.id}`}>
       <BackLink />
       <PageHeader
+        experimental
         title={<span id="inv-h">{inv.number ? t('billing.invoice.title', { number: inv.number }) : t('billing.invoice.pending')}</span>}
         description={<><StatusBadge status={inv.status} /> {statusText ?? (date ? `${t('billing.invoice.issued')} ${date}` : '')}</>}
         actions={<PdfLink id={inv.id} />}

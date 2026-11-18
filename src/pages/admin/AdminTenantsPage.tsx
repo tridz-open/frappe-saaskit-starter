@@ -21,7 +21,7 @@ function Tenants() {
   const status = AdminStatus({ loading, error, forbidden, refresh })
   return (
     <section aria-labelledby="admin-tenants-h">
-      <PageHeader title={<span id="admin-tenants-h">{t('admin.tenants.title')}</span>} description={t('admin.tenants.lead')} />
+      <PageHeader experimental title={<span id="admin-tenants-h">{t('admin.tenants.title')}</span>} description={t('admin.tenants.lead')} />
       <Stack>
         {status ?? (
           <>

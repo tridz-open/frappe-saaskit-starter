@@ -11,7 +11,7 @@ export function ForgotPassword() {
   useEffect(() => { if (wait <= 0) return; const id = setTimeout(() => setWait(wait - 1), 1000); return () => clearTimeout(id) }, [wait])
   async function resend() { try { await forgotPassword(sentTo) } catch { /* neutral */ } setWait(30) }
   return (
-    <AuthForm title={t('auth.forgot.title')} doneTitle={t('auth.forgot.sentTitle')} submitLabel={t('auth.forgot.send')} busyLabel={t('auth.forgot.busy')} lead={t('auth.forgot.lead')}
+    <AuthForm experimental title={t('auth.forgot.title')} doneTitle={t('auth.forgot.sentTitle')} submitLabel={t('auth.forgot.send')} busyLabel={t('auth.forgot.busy')} lead={t('auth.forgot.lead')}
       done={sentTo ? <><p>{t('auth.forgot.sent', { email: sentTo })}</p>
         <Button type="button" disabled={wait > 0} onClick={() => void resend()}>{wait > 0 ? t('auth.forgot.resendIn', { s: wait }) : t('auth.forgot.resend')}</Button></> : null}
       fields={[{ name: 'email', label: t('auth.email'), type: 'email', autoComplete: 'email', requiredMsg: t('auth.email.required') }]}

@@ -27,7 +27,7 @@ export function TicketPage() {
       <p><Link to="/console/support">{t('support.back')}</Link></p>
       {!ticket ? <Alert tone="danger">{t('support.notFound')}</Alert> : (
         <>
-          <PageHeader title={ticket.subject} description={<>{t('support.status')}: <Badge tone={ticket.status === 'closed' ? 'neutral' : ticket.status === 'pending' ? 'warning' : 'success'}>{t(`support.status.${ticket.status}`)}</Badge></>} />
+          <PageHeader experimental title={ticket.subject} description={<>{t('support.status')}: <Badge tone={ticket.status === 'closed' ? 'neutral' : ticket.status === 'pending' ? 'warning' : 'success'}>{t(`support.status.${ticket.status}`)}</Badge></>} />
           <Stack>
           <ol aria-label={t('support.conversation')} style={{ listStyle: 'none', padding: 0, margin: 0, display: 'grid', gap: 'var(--space-3)' }}>
             {ticket.messages.map((m, i) => {

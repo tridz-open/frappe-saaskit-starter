@@ -44,7 +44,7 @@ export function TeamPage() {
   }
   return (
     <div>
-      <PageHeader title={t('team.title')} description={t('team.intro')} />
+      <PageHeader experimental title={t('team.title')} description={t('team.intro')} />
       <Stack>
       {!team.loading && !team.ready && <Alert tone="neutral" role="status">{t('team.notLive')}</Alert>}
       <section aria-labelledby="team-members">

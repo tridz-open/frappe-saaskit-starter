@@ -55,7 +55,8 @@ const toggleStyle: CSSProperties = {
   borderRadius: 'var(--radius-sm)',
 }
 
-export function AuthForm({ title, fields, submitLabel, busyLabel, onSubmit, footer, done, doneTitle, consent, lead, errorMessages, notice }: {
+import { ExperimentalBadge } from '../../components/primitives'
+export function AuthForm({ title, fields, submitLabel, busyLabel, onSubmit, footer, done, doneTitle, consent, lead, errorMessages, notice, experimental }: {
   title: string
   fields: Field[]
   submitLabel: string
@@ -67,6 +68,7 @@ export function AuthForm({ title, fields, submitLabel, busyLabel, onSubmit, foot
   doneTitle?: string
   consent?: ReactNode
   lead?: string
+  experimental?: boolean
   /** Per-form overrides of server error messages, keyed by error code. */
   errorMessages?: Record<string, string>
   /** One-line notice above the form (e.g. "You've been signed out."). */
@@ -128,6 +130,7 @@ export function AuthForm({ title, fields, submitLabel, busyLabel, onSubmit, foot
 
   return (
     <section aria-labelledby="auth-title">
+      {experimental && <p><ExperimentalBadge /></p>}
       <h1 id="auth-title">{done && doneTitle ? doneTitle : title}</h1>
       {lead && !done && <p data-slot="lead">{lead}</p>}
       {notice && !done && <p role="status" className="muted" style={{ margin: 0, fontSize: 'var(--text-sm)' }}>{notice}</p>}
