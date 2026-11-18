@@ -4,7 +4,10 @@
 
 [![CI](https://github.com/tridz-open/frappe-saaskit-starter/actions/workflows/ci.yml/badge.svg)](https://github.com/tridz-open/frappe-saaskit-starter/actions/workflows/ci.yml)
 
-Launch your Frappe app as SaaS product with Frappe Cloud handling the had parts. It is the customer-facing site and console you put in front of your app when you sell it as a subscription, with each tenant hosted on Frappe Cloud and the whole thing backed by the [`saas_core`](https://github.com/tridz-open/saas_core) control plane. It is not a generic SaaS template.
+> [!WARNING]
+> **ALPHA, BLEEDING EDGE.** Early-stage software: expect breaking changes between releases, with no migration path guaranteed. Not yet recommended for production. Pin an exact version.
+
+Launch your Frappe app as a SaaS product, with Frappe Cloud handling the hard parts. It is the customer-facing site and console you put in front of your app when you sell it as a subscription, with each tenant hosted on Frappe Cloud and the whole thing backed by the [`saas_core`](https://github.com/tridz-open/saas_core) control plane. It is not a generic SaaS template.
 
 Built with Vite, React 19 and TypeScript, it ships the pages that selling a Frappe app as SaaS needs: landing, pricing, signup/login/password reset, onboarding, checkout, provisioning progress, and a customer console (instances, backups, plan, billing, invoices, team, account, support).
 
