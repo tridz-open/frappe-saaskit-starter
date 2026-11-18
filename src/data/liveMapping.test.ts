@@ -8,8 +8,8 @@ describe('toUser', () => {
     expect(toUser({ ...me, email_verified: false }).emailVerified).toBe(false)
     expect(toUser({ ...me, email_verified: true }).emailVerified).toBe(true)
   })
-  it('defaults to verified when the field is absent', () => {
-    expect(toUser(me).emailVerified).toBe(true)
+  it('defaults to unverified when the field is absent', () => {
+    expect(toUser(me).emailVerified).toBe(false)
   })
   it('maps the rest of the profile', () => {
     expect(toUser({ user: 'a', email: 'a@x.test' })).toMatchObject({ id: 'a', name: 'a@x.test', onboarded: true })

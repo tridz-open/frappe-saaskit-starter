@@ -132,6 +132,7 @@ export function useCheckout() {
     },
   }
 }
+function notSupported(what: string) { return new Error(`${what} is not supported by the live saas_core API`) }
 export function useInstances() {
   const q = K.useTenants(); const cr = K.useCreateTenant(); const dup = K.useDuplicateTenant(); const del = K.useRequestDeleteTenant()
   const instances = (q.data ?? []).map(toInstance)
@@ -141,9 +142,9 @@ export function useInstances() {
     async create(input: { name: string; planId: string }) { const r = await cr.mutateAsync({ slug: slugify(input.name), plan: input.planId }); return { id: r.tenant.name, jobId: r.job.name } },
     async duplicate(id: string) { const s = instances.find((i) => i.id === id); if (s) await dup.mutateAsync({ id, slug: slugify(`${s.name}-copy`) }) },
     async remove(id: string, confirmSlug?: string) { await del.mutateAsync({ id, confirm_slug: confirmSlug ?? instances.find((i) => i.id === id)?.name ?? id }) },
-    // Removal approval is a backend workflow not exposed by the contract: documented no-ops.
-    async approveRemoval(_id: string) {},
-    async cancelRemoval(_id: string) {},
+    // Removal approval is a backend workflow not exposed by the contract: fail loudly instead of pretending to succeed.
+    async approveRemoval(_id: string): Promise<void> { throw notSupported('approveRemoval') },
+    async cancelRemoval(_id: string): Promise<void> { throw notSupported('cancelRemoval') },
   }
 }
 export function useProvisioningJob(jobId: string) {
@@ -227,9 +228,9 @@ export function usePaymentMethods() {
 // Usage, sessions and notifications have NO backend endpoint. Customers must never see invented numbers,
 // so these return honest empty data (the UI hides the sections via useCapabilities()).
 export function useUsage() { return { metrics: [] as T.UsageMetric[], loading: false } }
-export function useSessions() { return { sessions: [] as T.Session[], loading: false, async revoke(_id: string) {} } }
+export function useSessions() { return { sessions: [] as T.Session[], loading: false, async revoke(_id: string): Promise<void> { throw notSupported('sessions.revoke') } } }
 export function useNotifications() {
-  return { notifications: [] as T.Notification[], unread: 0, loading: false, async markRead(_id: string) {}, async markAllRead() {} }
+  return { notifications: [] as T.Notification[], unread: 0, loading: false, async markRead(_id: string): Promise<void> { throw notSupported('notifications.markRead') }, async markAllRead(): Promise<void> { throw notSupported('notifications.markAllRead') } }
 }
 /** What the live API can really serve. Anything false is hidden in the UI rather than faked. */
 export function useCapabilities(): T.Capabilities {
