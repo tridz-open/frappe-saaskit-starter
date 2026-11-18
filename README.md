@@ -2,6 +2,8 @@
 
 `frappe-saaskit-starter`
 
+Docs: https://tridz-open.github.io/frappe-saaskit/ (Frappe SaaS documentation)
+
 [![CI](https://github.com/tridz-open/frappe-saaskit-starter/actions/workflows/ci.yml/badge.svg)](https://github.com/tridz-open/frappe-saaskit-starter/actions/workflows/ci.yml)
 
 > [!WARNING]
@@ -14,7 +16,7 @@ Built with Vite, React 19 and TypeScript, it ships the pages that selling a Frap
 The stack:
 
 - [`saas_core`](https://github.com/tridz-open/saas_core): the Frappe control-plane app that owns plans, subscriptions, billing and tenant provisioning on Frappe Cloud.
-- [`frappe-saaskit-sdk`](https://github.com/tridz-open/frappe-saaskit-sdk): the TypeScript SDK (`@frappe-saaskit/client` and `@frappe-saaskit/react`) this front end uses to talk to `saas_core`.
+- [`frappe-saaskit-sdk`](https://github.com/tridz-open/saas_core/tree/main/sdk): the TypeScript SDK (`@frappe-saaskit/client` and `@frappe-saaskit/react`) this front end uses to talk to `saas_core`.
 - This repo: the front end (landing to customer console) you fork and brand for your product.
 
 It runs in two modes:
@@ -85,23 +87,23 @@ Open http://localhost:5173. If `npm install` cannot fetch the SDK (see below) fi
 
 ## Install the SDK for live mode
 
-The SDK ([frappe-saaskit-sdk](https://github.com/tridz-open/frappe-saaskit-sdk)) is distributed as GitHub release tarballs until the `@frappe-saaskit` npm scope is registered. Versions are lock-stepped, so bump both URLs together.
+The SDK ([frappe-saaskit-sdk](https://github.com/tridz-open/saas_core/tree/main/sdk)) is distributed as GitHub release tarballs until the `@frappe-saaskit` npm scope is registered. Versions are lock-stepped, so bump both URLs together.
 
 **Primary (public release):** in `package.json`, point both packages at the release assets and pin the inner client with an override (npm `overrides`; the react tarball depends on the client by exact version):
 
 ```json
 "dependencies": {
-  "@frappe-saaskit/client": "https://github.com/tridz-open/frappe-saaskit-sdk/releases/download/v0.1.0-alpha.3/frappe-saaskit-client-0.1.0-alpha.3.tgz",
-  "@frappe-saaskit/react": "https://github.com/tridz-open/frappe-saaskit-sdk/releases/download/v0.1.0-alpha.3/frappe-saaskit-react-0.1.0-alpha.3.tgz"
+  "@frappe-saaskit/client": "https://github.com/tridz-open/saas_core/releases/download/v0.1.0-alpha.3/frappe-saaskit-client-0.1.0-alpha.4.tgz",
+  "@frappe-saaskit/react": "https://github.com/tridz-open/saas_core/releases/download/v0.1.0-alpha.3/frappe-saaskit-react-0.1.0-alpha.4.tgz"
 },
 "overrides": {
-  "@frappe-saaskit/client": "https://github.com/tridz-open/frappe-saaskit-sdk/releases/download/v0.1.0-alpha.3/frappe-saaskit-client-0.1.0-alpha.3.tgz"
+  "@frappe-saaskit/client": "https://github.com/tridz-open/saas_core/releases/download/v0.1.0-alpha.3/frappe-saaskit-client-0.1.0-alpha.4.tgz"
 }
 ```
 
-**Use SDK `0.1.0-alpha.3`.** Download the two `.tgz` assets from the [frappe-saaskit-sdk releases](https://github.com/tridz-open/frappe-saaskit-sdk/releases) (tag `v0.1.0-alpha.3`) and use the release URLs above, or save them in `vendor/saaskit/` and use `file:` specs with the same override block, for example `"@frappe-saaskit/client": "file:vendor/saaskit/frappe-saaskit-client-0.1.0-alpha.3.tgz"`.
+**Use SDK `0.1.0-alpha.4`.** Download the two `.tgz` assets from the [saas_core releases](https://github.com/tridz-open/saas_core/releases) (tag `v0.1.0-alpha.3`) and use the release URLs above, or save them in `vendor/saaskit/` and use `file:` specs with the same override block, for example `"@frappe-saaskit/client": "file:vendor/saaskit/frappe-saaskit-client-0.1.0-alpha.3.tgz"`.
 
-**Vendored copy:** `package.json` and `vendor/saaskit/` in this checkout use the `0.1.0-alpha.3` tarballs (client, react and mock). The SDK is only needed for live mode and for `npm run typecheck`; fixture mode does not use it. **Duplicate workspace is hidden in live mode** (the `duplicate` capability is `false`, so the "Make a copy" button does not render): saas_core removed `tenants.duplicate` (API 2.0.0-alpha.1) and SDK `0.1.0-alpha.3` has no duplicate call, so it is unavailable against a live backend. Fixture mode still offers it.
+**Vendored copy:** `package.json` and `vendor/saaskit/` in this checkout use the `0.1.0-alpha.4` tarballs (client, react and mock). The SDK is only needed for live mode and for `npm run typecheck`; fixture mode does not use it. **Duplicate workspace is hidden in live mode** (the `duplicate` capability is `false`, so the "Make a copy" button does not render): saas_core removed `tenants.duplicate` (API 2.0.0-alpha.1) and SDK `0.1.0-alpha.4` has no duplicate call, so it is unavailable against a live backend. Fixture mode still offers it.
 
 ## Run in fixture mode (no backend)
 
@@ -273,7 +275,7 @@ The starter is **unbranded but not unstyled**. It uses ui-sdk's default theme, w
 
 ## Related repositories
 
-- [frappe-saaskit-sdk](https://github.com/tridz-open/frappe-saaskit-sdk): the TypeScript SDK (`@frappe-saaskit/*`).
+- [frappe-saaskit-sdk](https://github.com/tridz-open/saas_core/tree/main/sdk): the TypeScript SDK (`@frappe-saaskit/*`).
 - `saas_core`: the Frappe control-plane app the SDK talks to. Public at [tridz-open/saas_core](https://github.com/tridz-open/saas_core).
 
 ## Note to the Frappe team
