@@ -15,8 +15,8 @@
     "e2e": "playwright test"
   },
   "dependencies": {
-    "@frappe-saaskit/client": "file:./vendor/saaskit/frappe-saaskit-client-0.1.0-alpha.1.tgz",
-    "@frappe-saaskit/react": "file:./vendor/saaskit/frappe-saaskit-react-0.1.0-alpha.1.tgz",
+    "@frappe-saaskit/client": "file:./vendor/saaskit/frappe-saaskit-client-0.1.0-alpha.3.tgz",
+    "@frappe-saaskit/react": "file:./vendor/saaskit/frappe-saaskit-react-0.1.0-alpha.3.tgz",
     "@tanstack/react-query": "^5.107.1",
     "@ui-sdk/core": "^0.1.0-beta.6",
     "@ui-sdk/react": "^0.1.0-beta.6",
@@ -36,7 +36,8 @@
     "oxlint": "^1.90.0",
     "typescript": "~7.0.2",
     "vite": "^8.3.6",
-    "vitest": "^5.1.0"
+    "vitest": "^5.1.0",
+    "@frappe-saaskit/mock": "file:./vendor/saaskit/frappe-saaskit-mock-0.1.0-alpha.3.tgz"
   },
   "license": "MIT",
   "description": "Customer-console starter for Frappe SaaS products: React + ui-sdk, runs on fixtures or a saas_core backend.",
@@ -52,6 +53,6 @@
     "node": ">=20.19"
   },
   "overrides": {
-    "@frappe-saaskit/client": "file:./vendor/saaskit/frappe-saaskit-client-0.1.0-alpha.1.tgz"
+    "@frappe-saaskit/client": "file:./vendor/saaskit/frappe-saaskit-client-0.1.0-alpha.3.tgz"
   }
 }

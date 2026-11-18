@@ -101,7 +101,7 @@ The SDK ([frappe-saaskit-sdk](https://github.com/tridz-open/frappe-saaskit-sdk))
 
 **Use SDK `0.1.0-alpha.3`.** Download the two `.tgz` assets from the [frappe-saaskit-sdk releases](https://github.com/tridz-open/frappe-saaskit-sdk/releases) (tag `v0.1.0-alpha.3`) and use the release URLs above, or save them in `vendor/saaskit/` and use `file:` specs with the same override block, for example `"@frappe-saaskit/client": "file:vendor/saaskit/frappe-saaskit-client-0.1.0-alpha.3.tgz"`.
 
-**Known mismatch:** `package.json` and `vendor/saaskit/` in this checkout still point at the `0.1.0-alpha.1` tarballs; they have not been re-vendored to alpha.3 yet. The live adapter reads `Me.email_verified`, which the alpha.1 types do not declare (see `src/data/liveMapping.ts`). The SDK is only needed for live mode and for `npm run typecheck`; fixture mode does not use it.
+**Vendored copy:** `package.json` and `vendor/saaskit/` in this checkout use the `0.1.0-alpha.3` tarballs (client, react and mock). The SDK is only needed for live mode and for `npm run typecheck`; fixture mode does not use it. Duplicating a workspace is not available in live mode with this SDK version.
 
 ## Run in fixture mode (no backend)
 

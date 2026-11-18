@@ -134,13 +134,14 @@ export function useCheckout() {
 }
 function notSupported(what: string) { return new Error(`${what} is not supported by the live saas_core API`) }
 export function useInstances() {
-  const q = K.useTenants(); const cr = K.useCreateTenant(); const dup = K.useDuplicateTenant(); const del = K.useRequestDeleteTenant()
+  const q = K.useTenants(); const cr = K.useCreateTenant(); const del = K.useRequestDeleteTenant()
   const instances = (q.data ?? []).map(toInstance)
   return {
     instances, loading: q.isLoading, error: q.isError, refresh: () => q.refetch(),
     async get(id: string) { return instances.find((i) => i.id === id) ?? null },
     async create(input: { name: string; planId: string }) { const r = await cr.mutateAsync({ slug: slugify(input.name), plan: input.planId }); return { id: r.tenant.name, jobId: r.job.name } },
-    async duplicate(id: string) { const s = instances.find((i) => i.id === id); if (s) await dup.mutateAsync({ id, slug: slugify(`${s.name}-copy`) }) },
+    // SDK 0.1.0-alpha.3 no longer exposes a duplicate-tenant hook: fail loudly instead of pretending to succeed.
+    async duplicate(_id: string): Promise<void> { throw notSupported('Duplicating a workspace') },
     async remove(id: string, confirmSlug?: string) { await del.mutateAsync({ id, confirm_slug: confirmSlug ?? instances.find((i) => i.id === id)?.name ?? id }) },
     // Removal approval is a backend workflow not exposed by the contract: fail loudly instead of pretending to succeed.
     async approveRemoval(_id: string): Promise<void> { throw notSupported('approveRemoval') },
