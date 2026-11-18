@@ -2,7 +2,7 @@
 
 `frappe-saaskit-starter`
 
-Docs: https://tridz-open.github.io/frappe-saaskit/ (Frappe SaaS documentation)
+Docs: https://frappesaas.tridz.in/ (Frappe SaaS documentation)
 
 [![CI](https://github.com/tridz-open/frappe-saaskit-starter/actions/workflows/ci.yml/badge.svg)](https://github.com/tridz-open/frappe-saaskit-starter/actions/workflows/ci.yml)
 
