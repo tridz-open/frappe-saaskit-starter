@@ -9,12 +9,6 @@ It runs in two modes:
 - **Fixture mode** (default): in-memory demo data, no backend. Good for trying the UI and building pages.
 - **Live mode** (`VITE_DATA_ADAPTER=saaskit`): talks to a Frappe site running the `saas_core` control-plane app through the TypeScript SDK [`frappe-saaskit-sdk`](https://github.com/tridz-open/frappe-saaskit-sdk) (`@frappe-saaskit/client` and `@frappe-saaskit/react`). `saas_core` is not public yet, so fixture mode is the way to try the starter today; the SDK is installed from the vendored tarballs in `vendor/saaskit` until it is published to npm.
 
-## Use at your own risk, and contributions
-
-**Use at your own risk:** this is early alpha software, provided "as is" without warranty of any kind (see [LICENSE](LICENSE)). Don't use it for production data you can't afford to lose.
-
-**Contributions:** we are not accepting pull requests or outside contributions at this time. If you find a bug or a problem, please [open a GitHub issue](https://github.com/tridz-open/frappe-saaskit-starter/issues).
-
 ## Status: alpha
 
 ### Experimental features
@@ -282,3 +276,9 @@ Please open an issue on this repository, or contact Tridz Technologies at the ad
 ## License
 
 MIT, see [LICENSE](LICENSE). Copyright (c) 2026 Tridz Technologies.
+
+## Use at your own risk, and contributions
+
+**Use at your own risk:** this is early alpha software, provided "as is" without warranty of any kind (see [LICENSE](LICENSE)). Don't use it for production data you can't afford to lose.
+
+**Contributions:** we are not accepting pull requests or outside contributions at this time. If you find a bug or a problem, please [open a GitHub issue](https://github.com/tridz-open/frappe-saaskit-starter/issues).
