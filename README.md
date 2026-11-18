@@ -164,6 +164,8 @@ Pages and components can be wrapped in a route override to change behaviour with
 - **`Onboarding`** (`src/pages/onboarding/Onboarding.tsx`)
   - `planCards?`: `highlightPlanId`, `renderPlanFeatures`, `badgeLabel`, forwarded to `PlanRadioCards`.
   - `checkSlug?: (slug, signal) => Promise<SlugCheck>`: replaces the data adapter's `useSlugAvailability` for the address field. It is called with a valid, debounced slug and an `AbortSignal` that fires when the user keeps typing. Resolve with `{ slug, available, reason: null | 'invalid' | 'reserved' | 'taken', message, suggestion }` (`message` is shown as the error, `suggestion` offers a one-click replacement); reject when the check cannot be done, which shows a soft warning and does not block the user.
+- **`ProvisioningPage`** (`src/pages/provisioning/ProvisioningPage.tsx`)
+  - `readyAction?: ReactNode | ((state) => ReactNode)`: replaces the default "Open my workspace" link once provisioning is active (also when the state has no `url`). Omitted = today's behaviour.
 <!-- props:end -->
 
 ## Data adapters

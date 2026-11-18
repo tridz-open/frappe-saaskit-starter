@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
 import { Button } from '@ui-sdk/react/button'
@@ -9,6 +9,7 @@ import { useT } from '../../i18n'
 import { useProvisioning, useAuth, useSiteDomain } from '../../data'
 import { useSaas } from '../../app/context'
 import { shortRef } from '../../lib/display'
+import type { ProvisioningState } from '../../data/types'
 
 const css = `
 .pv-wrap{max-width:32rem;margin-inline:auto;padding-block:var(--space-8) var(--space-12)}
@@ -51,8 +52,17 @@ function useRefresh() {
   return async () => { await qc.invalidateQueries() }
 }
 
+export type ProvisioningPageProps = {
+  /**
+   * Primary action shown once provisioning is active, e.g. a sign-in-to-the-new-site button.
+   * Replaces the default "Open" link (which is shown only when the state has a `url`). A function
+   * receives the live state. Omitted: the default behaviour.
+   */
+  readyAction?: ReactNode | ((state: ProvisioningState) => ReactNode)
+}
+
 /** Route param is the tenant slug (a job id is also accepted by the fixture adapter). */
-export default function ProvisioningPage() {
+export default function ProvisioningPage({ readyAction }: ProvisioningPageProps = {}) {
   const t = useT()
   const { site } = useSaas()
   const { user } = useAuth()
@@ -144,10 +154,11 @@ export default function ProvisioningPage() {
         {!waiting && (
           <CardFooter>
             <div className="pv-actions">
-              {p.status === 'active' && p.url && <Button data-variant="solid" render={<a href={p.url} />}>{t('provisioning.open')}</Button>}
+              {p.status === 'active' && readyAction != null && (typeof readyAction === 'function' ? readyAction(p) : readyAction)}
+              {p.status === 'active' && readyAction == null && p.url && <Button data-variant="solid" render={<a href={p.url} />}>{t('provisioning.open')}</Button>}
               {p.status === 'failed' && <Button data-variant="solid" render={<a href={mail} />}>{t('provisioning.support')}</Button>}
               {p.status !== 'active' && <Button onClick={check} disabled={checking}>{t('provisioning.retry')}</Button>}
-              <Button data-variant={p.status === 'active' && !p.url ? 'solid' : undefined} render={<Link to="/console" />}>{p.status === 'active' ? t('provisioning.console') : t('provisioning.leave')}</Button>
+              <Button data-variant={p.status === 'active' && !p.url && readyAction == null ? 'solid' : undefined} render={<Link to="/console" />}>{p.status === 'active' ? t('provisioning.console') : t('provisioning.leave')}</Button>
             </div>
           </CardFooter>
         )}
